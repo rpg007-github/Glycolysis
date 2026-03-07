@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glycolysis &amp; Metabolism Gateway | Interactive Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1a14;
+  --bg2: #162010;
+  --bg3: #1d2b1a;
+  --card: #1a2818;
+  --card2: #213320;
+  --border: #2e4a2b;
+  --border2: #3d6438;
+  --accent: #4ecb71;
+  --accent2: #2ea84e;
+  --accent3: #88e8a2;
+  --gold: #f0c040;
+  --coral: #f07060;
+  --sky: #60b8e8;
+  --lavender: #b090e0;
+  --text: #e8f0e4;
+  --text2: #a8c0a0;
+  --text3: #6a8a62;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 12px;
+  --radius2: 20px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow2: 0 8px 40px rgba(0,0,0,0.6);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.75;
+  min-height: 100vh;
+}
+
+/* ---- BACKGROUND TEXTURE ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(78,203,113,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% 80%, rgba(46,168,78,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- LAYOUT ---- */
+.page-wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ---- HERO ---- */
+.hero {
+  padding: 64px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.hero h1 em { color: var(--accent); font-style: italic; }
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--text2);
+  max-width: 680px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.hero-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.series-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 5px 12px;
+  border-radius: 50px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.badge-series { background: rgba(78,203,113,0.15); color: var(--accent); border: 1px solid rgba(78,203,113,0.3); }
+.badge-unit { background: rgba(240,192,64,0.12); color: var(--gold); border: 1px solid rgba(240,192,64,0.25); }
+.badge-next { background: rgba(96,184,232,0.1); color: var(--sky); border: 1px solid rgba(96,184,232,0.2); }
+
+/* ---- LEVEL SWITCHER ---- */
+.level-strip {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15,26,20,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  margin: 0 -24px 40px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.level-strip-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.level-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+.level-btn {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 7px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.level-btn:hover { border-color: var(--accent2); color: var(--accent3); }
+.level-btn.active {
+  background: var(--accent);
+  color: #0a1a0d;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.level-btn[data-level="hs"].active { background: var(--gold); border-color: var(--gold); color: #1a1000; }
+.level-btn[data-level="college"].active { background: var(--sky); border-color: var(--sky); color: #061428; }
+.level-indicator {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.level-indicator span { color: var(--text2); }
+
+/* ---- TOC ---- */
+.toc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 28px 32px;
+  margin-bottom: 48px;
+}
+.toc-card h3 {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+.toc-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--text2);
+  font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.toc-link:hover { background: var(--card2); border-color: var(--border); color: var(--text); }
+.toc-num {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  min-width: 22px;
+}
+
+/* ---- SECTION CARDS ---- */
+.section-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 40px 44px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.section-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent2), transparent);
+}
+.section-card h2 {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: rgba(78,203,113,0.1);
+  border: 1px solid rgba(78,203,113,0.2);
+  padding: 3px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.section-card h3 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent3);
+  margin: 28px 0 12px;
+}
+.section-card p { color: var(--text2); margin-bottom: 16px; }
+.section-card p:last-child { margin-bottom: 0; }
+
+/* ---- LEVEL CONTENT ---- */
+.level-content { display: none; }
+.level-content.active { display: block; }
+
+/* ---- CALLOUT BOXES ---- */
+.callout {
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin: 20px 0;
+  border-left: 3px solid;
+}
+.callout-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.callout.analogy { background: rgba(240,192,64,0.08); border-color: var(--gold); }
+.callout.analogy .callout-label { color: var(--gold); }
+.callout.analogy p { color: #d4b060; }
+.callout.keyidea { background: rgba(78,203,113,0.08); border-color: var(--accent2); }
+.callout.keyidea .callout-label { color: var(--accent); }
+.callout.keyidea p { color: var(--text2); }
+.callout.pitfall { background: rgba(240,112,96,0.08); border-color: var(--coral); }
+.callout.pitfall .callout-label { color: var(--coral); }
+.callout.pitfall p { color: #d09080; }
+.callout.mnemonic { background: rgba(176,144,224,0.08); border-color: var(--lavender); }
+.callout.mnemonic .callout-label { color: var(--lavender); }
+.callout.mnemonic p { color: #c0a8e0; }
+.callout.clinic { background: rgba(96,184,232,0.08); border-color: var(--sky); }
+.callout.clinic .callout-label { color: var(--sky); }
+.callout.clinic p { color: #80c0e0; }
+
+/* ---- FORMULA BOX ---- */
+.formula-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--accent3);
+  overflow-x: auto;
+}
+.formula-label {
+  font-size: 0.65rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ---- WORKED EXAMPLE ---- */
+.worked-example {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin: 22px 0;
+}
+.we-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.we-badge {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(96,184,232,0.15);
+  color: var(--sky);
+  border: 1px solid rgba(96,184,232,0.25);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.we-title { font-weight: 600; color: var(--text); font-size: 0.95rem; }
+.we-body p { color: var(--text2); margin-bottom: 10px; }
+.we-body p:last-child { margin-bottom: 0; }
+.we-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+.we-step-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--sky);
+  min-width: 22px;
+  padding-top: 2px;
+}
+
+/* ---- INLINE PRACTICE Q ---- */
+.practice-q {
+  background: rgba(240,192,64,0.05);
+  border: 1px solid rgba(240,192,64,0.2);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 22px 0;
+}
+.pq-header {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.pq-q { font-weight: 500; color: var(--text); margin-bottom: 14px; }
+.pq-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.pq-opt {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 0.9rem;
+  text-align: left;
+  transition: all 0.15s;
+  width: 100%;
+}
+.pq-opt:hover { border-color: var(--gold); color: var(--text); }
+.pq-opt.correct { background: rgba(78,203,113,0.15); border-color: var(--accent); color: var(--accent3); }
+.pq-opt.wrong { background: rgba(240,112,96,0.1); border-color: var(--coral); color: var(--coral); }
+.pq-feedback {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+.pq-feedback.show { display: block; }
+.pq-feedback.correct { background: rgba(78,203,113,0.1); color: var(--accent3); border: 1px solid rgba(78,203,113,0.2); }
+.pq-feedback.wrong { background: rgba(240,112,96,0.08); color: #e09080; border: 1px solid rgba(240,112,96,0.2); }
+
+/* ---- STEP TABLE ---- */
+.step-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.875rem;
+}
+.step-table th {
+  background: var(--bg2);
+  color: var(--text3);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+}
+.step-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+.step-table tr:hover td { background: rgba(255,255,255,0.02); }
+.step-table code { font-family: var(--mono); font-size: 0.8rem; color: var(--accent3); }
+.step-num-cell { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+.enzyme-name { color: var(--sky); font-weight: 500; }
+.energy-cell { font-family: var(--mono); font-size: 0.8rem; }
+.energy-invest { color: var(--coral); }
+.energy-harvest { color: var(--accent); }
+.reg-cell { font-size: 0.8rem; color: var(--lavender); }
+
+/* ---- QUIZ SECTION ---- */
+.quiz-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 40px 44px;
+  margin-bottom: 36px;
+}
+.quiz-section h2 {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.quiz-section .section-sub { color: var(--text2); font-size: 0.95rem; margin-bottom: 28px; }
+.quiz-item { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+.quiz-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.quiz-q-num { font-family: var(--mono); font-size: 0.68rem; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 8px; }
+.quiz-q-text { font-weight: 500; color: var(--text); margin-bottom: 14px; line-height: 1.6; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 18px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 0.9rem;
+  text-align: left;
+  transition: all 0.15s;
+  width: 100%;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--accent2); color: var(--text); }
+.quiz-opt.correct { background: rgba(78,203,113,0.15); border-color: var(--accent); color: var(--accent3); }
+.quiz-opt.wrong { background: rgba(240,112,96,0.1); border-color: var(--coral); color: var(--coral); }
+.quiz-opt:disabled { cursor: default; }
+.quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: rgba(78,203,113,0.1); color: var(--accent3); border: 1px solid rgba(78,203,113,0.15); }
+.quiz-feedback.wrong { background: rgba(240,112,96,0.08); color: #d09080; border: 1px solid rgba(240,112,96,0.15); }
+.quiz-score-bar {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-top: 24px;
+  display: none;
+}
+.quiz-score-bar.show { display: block; }
+.score-label { font-family: var(--mono); font-size: 0.75rem; color: var(--text3); margin-bottom: 8px; }
+.score-val { font-family: var(--serif); font-size: 2rem; color: var(--text); font-weight: 700; }
+.score-track { height: 6px; background: var(--bg3); border-radius: 3px; margin-top: 12px; }
+.score-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.8s ease; }
+
+/* ---- FLASHCARDS ---- */
+.fc-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 40px 44px;
+  margin-bottom: 36px;
+}
+.fc-section h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--text); margin-bottom: 8px; }
+.fc-sub { color: var(--text2); font-size: 0.95rem; margin-bottom: 24px; }
+.fc-filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.fc-filter {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 5px 14px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.fc-filter:hover { border-color: var(--accent2); color: var(--accent3); }
+.fc-filter.active { background: var(--accent2); color: #0a1a0d; border-color: var(--accent2); }
+.fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.fc-card {
+  height: 180px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.fc-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+.fc-card.flipped .fc-inner { transform: rotateY(180deg); }
+.fc-front, .fc-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+.fc-front {
+  background: var(--card2);
+  border: 1px solid var(--border);
+}
+.fc-back {
+  background: rgba(78,203,113,0.08);
+  border: 1px solid rgba(78,203,113,0.25);
+  transform: rotateY(180deg);
+}
+.fc-cat {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+.fc-front-text { font-weight: 500; color: var(--text); font-size: 0.9rem; line-height: 1.5; }
+.fc-back-text { color: var(--accent3); font-size: 0.88rem; line-height: 1.6; }
+.fc-hint { font-size: 0.7rem; color: var(--text3); margin-top: 12px; font-style: italic; }
+
+/* ---- SHORT ANSWER ---- */
+.sa-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 40px 44px;
+  margin-bottom: 36px;
+}
+.sa-section h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--text); margin-bottom: 8px; }
+.sa-sub { color: var(--text2); font-size: 0.95rem; margin-bottom: 28px; }
+.sa-item { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+.sa-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sa-q-num { font-family: var(--mono); font-size: 0.68rem; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 8px; }
+.sa-q-text { font-weight: 500; color: var(--text); margin-bottom: 14px; line-height: 1.6; font-size: 1rem; }
+.sa-level-tag { font-family: var(--mono); font-size: 0.62rem; color: var(--sky); background: rgba(96,184,232,0.1); border: 1px solid rgba(96,184,232,0.2); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+.sa-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.sa-textarea:focus { border-color: var(--accent2); }
+.sa-submit {
+  margin-top: 10px;
+  padding: 9px 24px;
+  background: var(--accent2);
+  color: #051008;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sa-submit:hover { background: var(--accent); }
+.sa-result { display: none; margin-top: 16px; }
+.sa-result.show { display: block; }
+.sa-score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.sa-pct { font-family: var(--mono); font-size: 0.85rem; color: var(--text); font-weight: 600; }
+.sa-bar-track { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; }
+.sa-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.sa-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.sa-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+.sa-tag.hit { background: rgba(78,203,113,0.15); color: var(--accent3); border: 1px solid rgba(78,203,113,0.2); }
+.sa-tag.miss { background: rgba(255,255,255,0.05); color: var(--text3); border: 1px solid var(--border); }
+.sa-model-toggle {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+.sa-model-toggle:hover { color: var(--text2); }
+.sa-model { display: none; margin-top: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
+.sa-model.show { display: block; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 700px) {
+  .section-card, .quiz-section, .fc-section, .sa-section { padding: 24px 20px; }
+  .hero { padding: 40px 0 28px; }
+  .fc-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Metabolism Series · Module 1</div>
+  <h1>Glycolysis &amp; the<br><em>Metabolism Gateway</em></h1>
+  <p class="hero-sub">Every calorie you have ever eaten passed through glycolysis. This module walks you through all ten steps, connects the pathway to the larger metabolic network, and introduces the pentose phosphate shunt — your cells' essential detour for building and protecting themselves.</p>
+  <div class="hero-meta">
+    <span class="series-badge badge-series">Series: Core Metabolism</span>
+    <span class="series-badge badge-unit">Module 1 of 4</span>
+    <span class="series-badge badge-next">Next → Krebs Cycle</span>
+  </div>
+</div>
+
+<!-- LEVEL STRIP -->
+<div class="level-strip">
+  <div class="level-strip-inner">
+    <span class="level-label">Reading Level:</span>
+    <button class="level-btn active" data-level="basic" onclick="setLevel('basic')">8th Grade</button>
+    <button class="level-btn" data-level="hs" onclick="setLevel('hs')">High School Junior</button>
+    <button class="level-btn" data-level="college" onclick="setLevel('college')">College Sophomore / Pre-Med</button>
+    <span class="level-indicator">Active: <span id="level-name">8th Grade</span></span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-card">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a href="#sec1" class="toc-link"><span class="toc-num">01</span>What Is Metabolism?</a>
+    <a href="#sec2" class="toc-link"><span class="toc-num">02</span>Overview of Glycolysis</a>
+    <a href="#sec3" class="toc-link"><span class="toc-num">03</span>Phase 1: Energy Investment</a>
+    <a href="#sec4" class="toc-link"><span class="toc-num">04</span>Phase 2: Energy Payoff</a>
+    <a href="#sec5" class="toc-link"><span class="toc-num">05</span>Regulation of Glycolysis</a>
+    <a href="#sec6" class="toc-link"><span class="toc-num">06</span>Fate of Pyruvate</a>
+    <a href="#sec7" class="toc-link"><span class="toc-num">07</span>Pentose Phosphate Shunt</a>
+    <a href="#sec8" class="toc-link"><span class="toc-num">08</span>Connections to Full Metabolism</a>
+    <a href="#quiz" class="toc-link"><span class="toc-num">&#9654;</span>Multiple Choice Quiz</a>
+    <a href="#flashcards" class="toc-link"><span class="toc-num">&#9654;</span>Flashcards</a>
+    <a href="#shortanswer" class="toc-link"><span class="toc-num">&#9654;</span>Short Answer</a>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: WHAT IS METABOLISM ===== -->
+<div class="section-card" id="sec1">
+  <h2><span class="sec-num">01</span> What Is Metabolism?</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Metabolism is the word we use for all the chemical reactions happening inside you right now. If you ate breakfast this morning, your body is currently breaking those molecules apart, pulling out the stored energy, and using that energy to do everything — move your muscles, fire your brain signals, grow new cells, keep your heart beating.</p>
+    <div class="callout analogy">
+      <div class="callout-label">Think of It This Way</div>
+      <p>Imagine your body is a city. Metabolism is everything the city does: the power plants making electricity, the trucks delivering materials, the factories building things, the garbage trucks hauling away waste. Glycolysis is the main power plant — the one almost every other system depends on.</p>
+    </div>
+    <p>Metabolism has two sides. <strong>Catabolism</strong> means breaking things down to release energy — like taking apart a Lego set. <strong>Anabolism</strong> means building things up using that energy — like using Legos to build something new. Glycolysis is catabolism: it breaks apart sugar to release energy.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">Key Idea</div>
+      <p>The energy currency of the cell is a molecule called ATP (adenosine triphosphate). Almost everything your cells do requires ATP. Glycolysis is one way your cells make it.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">Tracking Energy In and Out</span></div>
+      <div class="we-body">
+        <p>You eat a piece of bread. The starch in bread is made of long chains of glucose. Your digestive system breaks the starch into individual glucose molecules. Those glucose molecules enter your cells. Glycolysis then breaks each glucose into two smaller molecules called pyruvate, capturing some of the energy as ATP. Where did that energy come from? It was stored in the chemical bonds of glucose — bonds that were originally built by a plant using sunlight.</p>
+      </div>
+    </div>
+    <div class="practice-q" id="pq1a">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Which word describes breaking molecules apart to release energy?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq1a',this,false)">Anabolism</button>
+        <button class="pq-opt" onclick="checkPQ('pq1a',this,true)">Catabolism</button>
+        <button class="pq-opt" onclick="checkPQ('pq1a',this,false)">Metabolism</button>
+        <button class="pq-opt" onclick="checkPQ('pq1a',this,false)">Synthesis</button>
+      </div>
+      <div class="pq-feedback" id="pq1a-fb"></div>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>Metabolism encompasses the complete set of biochemical reactions within a cell. It divides into two broad categories: <strong>catabolism</strong> (breaking complex molecules into simpler ones, releasing energy) and <strong>anabolism</strong> (building complex molecules from simpler ones, requiring energy). These two arms are interlinked — the energy released by catabolism powers anabolic reactions.</p>
+    <p>The universal energy carrier in biology is <strong>ATP</strong>. When cells need to do work — contract a muscle, build a protein, pump ions — they hydrolyze ATP to ADP plus inorganic phosphate, releasing about 7.3 kcal/mol of free energy. Glycolysis and the rest of cellular respiration exist primarily to regenerate ATP from ADP.</p>
+    <div class="callout analogy">
+      <div class="callout-label">Analogy</div>
+      <p>Think of ATP as a rechargeable battery. Catabolism (including glycolysis) recharges the battery. Anabolism and cell work drain it. The cell is constantly cycling through charge-discharge cycles, processing roughly 40 kg of ATP per day in an active adult — even though total body ATP at any moment is only about 250 mg.</p>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">ATP Hydrolysis</div>
+      ATP + H&#8322;O → ADP + Pᵢ + ~7.3 kcal/mol (free energy released)
+    </div>
+    <p>Glycolysis sits at the top of metabolism's hierarchy. It is the universal gateway: all carbohydrates, and many other molecules, funnel through it. Its product, pyruvate, then routes to the Krebs cycle (aerobic conditions) or fermentation (anaerobic conditions), making glycolysis a central traffic director for cellular energy.</p>
+    <div class="practice-q" id="pq1b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">An athlete's muscle cells run low on ATP during intense sprinting. Which process is primarily responsible for regenerating that ATP fastest?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq1b',this,false)">Anabolism of proteins</button>
+        <button class="pq-opt" onclick="checkPQ('pq1b',this,false)">Fatty acid synthesis</button>
+        <button class="pq-opt" onclick="checkPQ('pq1b',this,true)">Catabolism via glycolysis (and fermentation)</button>
+        <button class="pq-opt" onclick="checkPQ('pq1b',this,false)">Oxidative phosphorylation only</button>
+      </div>
+      <div class="pq-feedback" id="pq1b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>Metabolism is the integrated network of enzyme-catalyzed reactions that cells use to extract, store, and deploy free energy. The central concept is Gibbs free energy (ΔG): reactions proceed spontaneously when ΔG &lt; 0. Cells couple thermodynamically unfavorable reactions (ΔG &gt; 0) to favorable ones — most often the hydrolysis of ATP (ΔG°' = −7.3 kcal/mol, actual cellular ΔG ≈ −10 to −14 kcal/mol due to low [ADP] and [Pᵢ] relative to [ATP]).</p>
+    <p>The metabolic map organizes into interacting pathways: glycolysis, gluconeogenesis, the pentose phosphate pathway, the citric acid cycle, oxidative phosphorylation, fatty acid β-oxidation, fatty acid synthesis, amino acid catabolism, urea cycle, and nucleotide metabolism. These are tightly regulated by allosteric mechanisms, hormonal signals (insulin/glucagon axis), and substrate availability. Glycolysis is the entry point for glucose catabolism and feeds directly into gluconeogenesis (reverse), the PPP (branch at G6P), and the Krebs cycle (via pyruvate).</p>
+    <div class="formula-box">
+      <div class="formula-label">Standard Free Energy of ATP Hydrolysis</div>
+      ATP + H&#8322;O → ADP + Pᵢ    ΔG°' = −7.3 kcal/mol
+      Cellular ΔG ≈ −10 to −14 kcal/mol (due to mass action ratio)
+    </div>
+    <div class="callout keyidea">
+      <div class="callout-label">Key Concept</div>
+      <p>The actual ΔG of ATP hydrolysis in the cell is significantly more negative than ΔG°' because [ATP]/([ADP][Pᵢ]) is maintained far from equilibrium — the cell continuously regenerates ATP to keep this ratio high. Glycolysis and oxidative phosphorylation together sustain this disequilibrium.</p>
+    </div>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical Connection</div>
+      <p>Warburg effect: cancer cells preferentially use aerobic glycolysis (glycolysis even in the presence of oxygen) rather than oxidative phosphorylation. This produces less ATP per glucose but generates biosynthetic precursors (ribose-5-phosphate via PPP, serine via 3-phosphoglycerate) needed for rapid proliferation. This phenomenon underpins PET scanning (FDG uptake) and is a target of many anti-cancer strategies.</p>
+    </div>
+    <div class="practice-q" id="pq1c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">The actual cellular ΔG of ATP hydrolysis (−10 to −14 kcal/mol) is more negative than ΔG°' (−7.3 kcal/mol) primarily because:</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq1c',this,false)">Temperature in the cell is higher than 25°C</button>
+        <button class="pq-opt" onclick="checkPQ('pq1c',this,true)">The [ATP]/([ADP][Pᵢ]) ratio is maintained far above equilibrium</button>
+        <button class="pq-opt" onclick="checkPQ('pq1c',this,false)">Enzymes lower the activation energy of hydrolysis</button>
+        <button class="pq-opt" onclick="checkPQ('pq1c',this,false)">Cellular pH is lower than 7.0</button>
+      </div>
+      <div class="pq-feedback" id="pq1c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: OVERVIEW OF GLYCOLYSIS ===== -->
+<div class="section-card" id="sec2">
+  <h2><span class="sec-num">02</span> Overview of Glycolysis</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Glycolysis happens in the liquid part of the cell called the cytoplasm (not inside any organelle — just floating in the cell fluid). It takes one molecule of glucose (a 6-carbon sugar) and breaks it into two molecules of pyruvate (each 3 carbons). The whole process is ten steps, and a team of enzymes does each one.</p>
+    <div class="callout analogy">
+      <div class="callout-label">Think of It This Way</div>
+      <p>Think of glucose as a $10 bill. To use it, you need to break it into smaller bills. The first half of glycolysis spends two $1 bills (2 ATP) to split the $10 into two $5 bills. The second half converts each $5 into change — you get four $1 bills back (4 ATP) plus some "savings bonds" (NADH) you'll cash in later. Net profit: 2 ATP per glucose.</p>
+    </div>
+    <p>Glycolysis has two main phases. The first phase — steps 1 through 5 — spends energy to prepare glucose for splitting. The second phase — steps 6 through 10 — harvests energy from the resulting molecules. You put in 2 ATP and get out 4 ATP, for a net gain of 2 ATP. You also make 2 NADH, which are electron carriers that the cell uses for more energy production later.</p>
+    <div class="formula-box">
+      <div class="formula-label">Glycolysis Summary</div>
+      Glucose + 2 ADP + 2 Pᵢ + 2 NAD⁺ → 2 Pyruvate + 2 ATP + 2 NADH + 2 H⁺ + 2 H₂O
+    </div>
+    <div class="callout keyidea">
+      <div class="callout-label">Key Numbers</div>
+      <p>Input: 1 glucose, 2 ATP spent. Output: 2 pyruvate, 4 ATP made (net +2 ATP), 2 NADH. Location: cytoplasm.</p>
+    </div>
+    <div class="practice-q" id="pq2a">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Where in the cell does glycolysis take place?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq2a',this,false)">Mitochondria</button>
+        <button class="pq-opt" onclick="checkPQ('pq2a',this,false)">Nucleus</button>
+        <button class="pq-opt" onclick="checkPQ('pq2a',this,true)">Cytoplasm (cytosol)</button>
+        <button class="pq-opt" onclick="checkPQ('pq2a',this,false)">Endoplasmic reticulum</button>
+      </div>
+      <div class="pq-feedback" id="pq2a-fb"></div>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>Glycolysis is a ten-step cytosolic pathway that converts one glucose (C₆H₁₂O₆) into two molecules of pyruvate (C₃H₄O₃). It is divided into an <strong>energy investment phase</strong> (steps 1–5) that consumes 2 ATP per glucose, and an <strong>energy payoff phase</strong> (steps 6–10) that generates 4 ATP and 2 NADH per glucose. Net yield: 2 ATP and 2 NADH per glucose.</p>
+    <p>Glycolysis requires no oxygen. This makes it the only energy-generating pathway available to anaerobic organisms, and it is also the first step in aerobic respiration. The pathway is universal across all domains of life — the same ten steps occur in bacteria, yeast, plants, and humans, which speaks to how ancient and essential it is.</p>
+    <div class="formula-box">
+      <div class="formula-label">Balanced Net Equation</div>
+      Glucose + 2 NAD⁺ + 2 ADP + 2 Pᵢ → 2 Pyruvate + 2 NADH + 2 H⁺ + 2 ATP + 2 H₂O
+    </div>
+    <div class="callout mnemonic">
+      <div class="callout-label">Mnemonic — The 10 Enzymes in Order</div>
+      <p>"Hexokinase Phosphoglucose-isomerase Phosphofructokinase Aldolase TPI GAPDH PGK PGAM Enolase Pyruvate kinase"</p>
+      <p>Memory trick for the first three (the regulation checkpoints): <strong>H-P-P</strong> = "Happy Pathways Produce."</p>
+    </div>
+    <div class="practice-q" id="pq2b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">A cell produces 4 ATP during glycolysis but has a net gain of only 2 ATP. Why?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq2b',this,false)">Two ATP are lost as heat during the payoff phase</button>
+        <button class="pq-opt" onclick="checkPQ('pq2b',this,true)">Two ATP are consumed during the energy investment phase</button>
+        <button class="pq-opt" onclick="checkPQ('pq2b',this,false)">The cell uses 2 ATP to transport pyruvate to the mitochondria</button>
+        <button class="pq-opt" onclick="checkPQ('pq2b',this,false)">Two ATP are used to regenerate NAD⁺</button>
+      </div>
+      <div class="pq-feedback" id="pq2b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>Glycolysis (from Greek: glukus = sweet, lysis = splitting) converts glucose to two molecules of pyruvate through ten sequential enzyme-catalyzed reactions, all occurring in the cytosol. The pathway is divided into a preparatory (priming) phase and a payoff phase. Overall thermodynamics are favorable (ΔG°' = −18.5 kcal/mol for the net reaction), but several individual steps are close to equilibrium while three are highly exergonic and effectively irreversible under physiological conditions — these are the regulated steps.</p>
+    <p>Three enzymes catalyze essentially irreversible steps and are subject to allosteric regulation: <strong>hexokinase</strong> (step 1), <strong>phosphofructokinase-1</strong> (step 3, the primary rate-limiting step), and <strong>pyruvate kinase</strong> (step 10). The remaining seven steps are near-equilibrium and reversible — they are shared with gluconeogenesis, which uses distinct enzymes only at the three irreversible steps.</p>
+    <div class="formula-box">
+      <div class="formula-label">Net Glycolytic Equation (Standard Conditions)</div>
+      Glucose + 2 NAD⁺ + 2 ADP + 2 Pᵢ → 2 Pyruvate + 2 NADH + 2 H⁺ + 2 ATP + 2 H₂O
+      ΔG°' = −18.5 kcal/mol  |  Actual ΔG in vivo ≈ −28 kcal/mol
+    </div>
+    <div class="callout keyidea">
+      <div class="callout-label">The Three Irreversible Steps</div>
+      <p>Step 1 (hexokinase), Step 3 (PFK-1), Step 10 (pyruvate kinase). These are bypassed in gluconeogenesis by glucose-6-phosphatase, fructose-1,6-bisphosphatase, and the pyruvate carboxylase/PEPCK pair respectively. Knowing these bypass enzymes is essential for understanding metabolic regulation.</p>
+    </div>
+    <div class="practice-q" id="pq2c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Which enzyme catalyzes the primary rate-limiting step of glycolysis and is the most important regulatory point?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq2c',this,false)">Hexokinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq2c',this,true)">Phosphofructokinase-1 (PFK-1)</button>
+        <button class="pq-opt" onclick="checkPQ('pq2c',this,false)">Pyruvate kinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq2c',this,false)">Aldolase</button>
+      </div>
+      <div class="pq-feedback" id="pq2c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: PHASE 1 ENERGY INVESTMENT ===== -->
+<div class="section-card" id="sec3">
+  <h2><span class="sec-num">03</span> Phase 1: Energy Investment (Steps 1–5)</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>The first five steps of glycolysis spend energy to prepare glucose for splitting. Think of it like priming a pump — you put energy in now so you can get more energy out later.</p>
+    <h3>Step 1 — Glucose gets a phosphate tag</h3>
+    <p>The enzyme <strong>hexokinase</strong> grabs a phosphate group from ATP and attaches it to glucose, making glucose-6-phosphate. This does two things: it uses one ATP (energy cost), and it traps glucose inside the cell. Once glucose has a phosphate tag, it cannot leave through the cell membrane.</p>
+    <h3>Step 2 — Rearrangement</h3>
+    <p>The enzyme <strong>phosphoglucose isomerase</strong> reshapes glucose-6-phosphate into a slightly different form called fructose-6-phosphate. No energy is used — this is just rearranging the atoms into a shape that works better for the next step.</p>
+    <h3>Step 3 — Another phosphate tag (the big commitment)</h3>
+    <p><strong>Phosphofructokinase (PFK)</strong> adds a second phosphate, spending another ATP to make fructose-1,6-bisphosphate. This is the most important step in the whole pathway — once this happens, the molecule is committed to glycolysis. The cell uses this step as its main "throttle" to speed up or slow down energy production.</p>
+    <h3>Step 4 — The split</h3>
+    <p><strong>Aldolase</strong> breaks fructose-1,6-bisphosphate in half. You now have two 3-carbon molecules. One is called glyceraldehyde-3-phosphate (G3P) and can continue directly. The other is dihydroxyacetone phosphate (DHAP).</p>
+    <h3>Step 5 — Interconversion</h3>
+    <p><strong>Triose phosphate isomerase (TPI)</strong> converts DHAP into another G3P. Now you have two G3P molecules — both able to continue through phase 2. This enzyme is so efficient that it is considered nearly perfect.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">Phase 1 Summary</div>
+      <p>Input: 1 glucose, 2 ATP. Output: 2 G3P molecules. Cost paid. Now ready for energy harvest.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">Why Does the Cell Spend ATP First?</span></div>
+      <div class="we-body">
+        <p>Question: The cell already wants energy — so why does it spend 2 ATP in phase 1?</p>
+        <p>Answer: Phosphorylation (adding phosphate groups) does two important things. First, it traps glucose inside the cell — phosphorylated molecules are charged and cannot cross membranes. Second, it activates the glucose molecule — the phosphate groups make the molecule more reactive and easier for enzymes in phase 2 to break apart. It is an investment that pays off 2-to-1 in phase 2.</p>
+      </div>
+    </div>
+    <div class="practice-q" id="pq3a">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Which step of glycolysis is considered the "point of no return" that commits glucose to the pathway?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq3a',this,false)">Step 1 — Hexokinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq3a',this,false)">Step 2 — Phosphoglucose isomerase</button>
+        <button class="pq-opt" onclick="checkPQ('pq3a',this,true)">Step 3 — Phosphofructokinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq3a',this,false)">Step 4 — Aldolase</button>
+      </div>
+      <div class="pq-feedback" id="pq3a-fb"></div>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>The investment phase phosphorylates glucose twice (using 2 ATP) and cleaves the resulting hexose bisphosphate into two interconvertible triose phosphates. All five reactions occur in the cytosol.</p>
+    <table class="step-table">
+      <thead><tr><th>Step</th><th>Enzyme</th><th>Reaction</th><th>Energy</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="step-num-cell">1</td><td class="enzyme-name">Hexokinase</td><td>Glucose → Glucose-6-P</td><td class="energy-cell energy-invest">−1 ATP</td><td>Traps glucose in cell; inhibited by G6P (product inhibition)</td></tr>
+        <tr><td class="step-num-cell">2</td><td class="enzyme-name">Phosphoglucose isomerase</td><td>G6P → Fructose-6-P</td><td>0</td><td>Isomerization; near-equilibrium, reversible</td></tr>
+        <tr><td class="step-num-cell">3</td><td class="enzyme-name">Phosphofructokinase-1</td><td>F6P → Fructose-1,6-bisP</td><td class="energy-cell energy-invest">−1 ATP</td><td>Rate-limiting; key allosteric regulation point</td></tr>
+        <tr><td class="step-num-cell">4</td><td class="enzyme-name">Aldolase</td><td>F-1,6-bisP → DHAP + G3P</td><td>0</td><td>Splits the 6C sugar into two 3C pieces</td></tr>
+        <tr><td class="step-num-cell">5</td><td class="enzyme-name">Triose phosphate isomerase</td><td>DHAP → G3P</td><td>0</td><td>Near-perfect enzyme; converts DHAP so only G3P continues</td></tr>
+      </tbody>
+    </table>
+    <div class="callout pitfall">
+      <div class="callout-label">Common Mistake</div>
+      <p>After step 5, you have TWO G3P molecules per original glucose. Everything from step 6 onward happens TWICE per glucose — so all yields (ATP, NADH) in phase 2 are per G3P but must be doubled for the per-glucose count.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">Hexokinase vs. Glucokinase</span></div>
+      <div class="we-body">
+        <p>Hexokinase (found in most cells) has a high affinity for glucose and is inhibited by its own product, G6P. This makes it self-regulating: when the cell is full of G6P, hexokinase slows down.</p>
+        <p>Liver and pancreatic beta cells have a special isoform called <strong>glucokinase (hexokinase IV)</strong>. It has a much lower affinity for glucose (Km ≈ 10 mM vs. 0.1 mM for hexokinase) and is NOT inhibited by G6P. This means the liver only phosphorylates glucose rapidly when blood glucose is high — serving as a glucose sensor. This distinction is clinically important in understanding diabetes and liver glucose metabolism.</p>
+      </div>
+    </div>
+    <div class="practice-q" id="pq3b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Triose phosphate isomerase converts DHAP to G3P. After step 5, how many G3P molecules are available for phase 2 from one glucose?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq3b',this,false)">1 — only the G3P from aldolase continues</button>
+        <button class="pq-opt" onclick="checkPQ('pq3b',this,true)">2 — both DHAP and G3P are converted to G3P</button>
+        <button class="pq-opt" onclick="checkPQ('pq3b',this,false)">3 — aldolase makes three fragments</button>
+        <button class="pq-opt" onclick="checkPQ('pq3b',this,false)">4 — each phosphate group generates one G3P</button>
+      </div>
+      <div class="pq-feedback" id="pq3b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>The preparatory phase commits glucose to the glycolytic pathway through sequential phosphorylation and structural rearrangement, culminating in cleavage to two glyceraldehyde-3-phosphate molecules.</p>
+    <table class="step-table">
+      <thead><tr><th>Step</th><th>Enzyme</th><th>ΔG°' (kcal/mol)</th><th>Mechanism / Regulation</th></tr></thead>
+      <tbody>
+        <tr><td class="step-num-cell">1</td><td class="enzyme-name">Hexokinase (I–III) / Glucokinase (IV)</td><td class="energy-cell energy-invest">−4.0</td><td>Mg²⁺-dependent phosphotransfer; HK inhibited by G6P (product); GK (liver) not inhibited by G6P, sigmoidal kinetics, Km ≈ 10 mM. Irreversible.</td></tr>
+        <tr><td class="step-num-cell">2</td><td class="enzyme-name">Phosphoglucose isomerase</td><td>+0.4</td><td>Ring opening; enediol intermediate; near equilibrium (ΔG ≈ 0 in vivo). Reversible — shared with gluconeogenesis.</td></tr>
+        <tr><td class="step-num-cell">3</td><td class="enzyme-name">PFK-1</td><td class="energy-cell energy-invest">−3.4</td><td>Key regulatory step. Allosteric activators: AMP, ADP, F-2,6-bisP. Inhibitors: ATP (high conc.), citrate, H⁺. F-2,6-bisP (made by PFK-2, activated by insulin) is the most potent activator. Irreversible.</td></tr>
+        <tr><td class="step-num-cell">4</td><td class="enzyme-name">Aldolase (class I in animals)</td><td>+5.7 (near 0 in vivo)</td><td>Schiff base mechanism with Lys residue. Pulls the equilibrium by mass action (G3P and DHAP continuously consumed).</td></tr>
+        <tr><td class="step-num-cell">5</td><td class="enzyme-name">Triose phosphate isomerase</td><td>+1.8 (≈0 in vivo)</td><td>Enediol intermediate; catalytic perfection (kcat/Km near diffusion limit, ~10⁸ M⁻¹s⁻¹). Prevents DHAP accumulation.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical: TPI Deficiency</div>
+      <p>Triose phosphate isomerase deficiency is a rare autosomal recessive disorder. DHAP accumulates and cannot be converted to G3P, leading to hemolytic anemia (red cells are highly glycolysis-dependent) and progressive neuromuscular deterioration. It is uniformly fatal in early childhood. It illustrates how even "near-equilibrium" enzymes can be rate-limiting when absent.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">PFK-1 Regulation: Integrating Energy Status</span></div>
+      <div class="we-body">
+        <p>Consider a hepatocyte in two states: (A) fed state (high ATP, high insulin) and (B) fasted state (low ATP, high glucagon).</p>
+        <div class="we-step"><span class="we-step-num">A</span><span>Fed: Insulin activates PFK-2 → elevated F-2,6-bisP → PFK-1 highly active → glycolysis proceeds. Simultaneously, high ATP allosterically inhibits PFK-1 at a separate site, but F-2,6-bisP overrides this inhibition.</span></div>
+        <div class="we-step"><span class="we-step-num">B</span><span>Fasted: Glucagon activates PKA → phosphorylates PFK-2/FBPase-2 bifunctional enzyme → FBPase-2 domain active → F-2,6-bisP drops → PFK-1 inhibited → glycolysis slows, gluconeogenesis favored.</span></div>
+        <p>This is a textbook example of hormonal control via second messenger (cAMP) regulating a key metabolic branch point.</p>
+      </div>
+    </div>
+    <div class="practice-q" id="pq3c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Fructose-2,6-bisphosphate (F-2,6-bisP) is elevated in the fed state. What is its primary effect on PFK-1?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq3c',this,false)">Inhibits PFK-1, slowing glycolysis to conserve ATP</button>
+        <button class="pq-opt" onclick="checkPQ('pq3c',this,true)">Allosterically activates PFK-1, even in the presence of high ATP</button>
+        <button class="pq-opt" onclick="checkPQ('pq3c',this,false)">Has no effect on PFK-1; it only regulates PFK-2</button>
+        <button class="pq-opt" onclick="checkPQ('pq3c',this,false)">Covalently modifies PFK-1 via phosphorylation</button>
+      </div>
+      <div class="pq-feedback" id="pq3c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 4: PHASE 2 ENERGY PAYOFF ===== -->
+<div class="section-card" id="sec4">
+  <h2><span class="sec-num">04</span> Phase 2: Energy Payoff (Steps 6–10)</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>This is where the cell gets its money back — and then some. Each G3P molecule goes through five more steps that pull out energy in the form of ATP and NADH. Remember: you have TWO G3P molecules from every glucose, so everything here happens twice.</p>
+    <h3>Step 6 — Making NADH and setting up ATP</h3>
+    <p><strong>GAPDH</strong> (a big-named enzyme) oxidizes G3P and loads the energy onto a carrier molecule NAD⁺, converting it to NADH. It also attaches an inorganic phosphate, creating a high-energy molecule called 1,3-bisphosphoglycerate.</p>
+    <h3>Step 7 — First ATP made</h3>
+    <p><strong>Phosphoglycerate kinase</strong> transfers the phosphate from 1,3-bisphosphoglycerate to ADP, making ATP. This is called substrate-level phosphorylation — ATP is made directly from a molecule, not from a membrane pump.</p>
+    <h3>Steps 8 and 9 — Moving the phosphate</h3>
+    <p>These two steps rearrange the molecule, moving the phosphate to a position where it has even more energy, creating a molecule called phosphoenolpyruvate (PEP). PEP is one of the highest-energy phosphate compounds in biology.</p>
+    <h3>Step 10 — Final ATP and making pyruvate</h3>
+    <p><strong>Pyruvate kinase</strong> transfers the phosphate from PEP to ADP, making the second ATP and releasing pyruvate. This is the end of glycolysis.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">Phase 2 Yield (per G3P → doubled for glucose)</div>
+      <p>Per G3P: 2 ATP, 1 NADH. Per glucose (×2): 4 ATP, 2 NADH. Minus the 2 ATP spent in phase 1 = net 2 ATP per glucose.</p>
+    </div>
+    <div class="practice-q" id="pq4a">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">In phase 2 of glycolysis, ATP is made by directly transferring a phosphate from a sugar molecule to ADP. What is this type of ATP production called?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq4a',this,false)">Oxidative phosphorylation</button>
+        <button class="pq-opt" onclick="checkPQ('pq4a',this,true)">Substrate-level phosphorylation</button>
+        <button class="pq-opt" onclick="checkPQ('pq4a',this,false)">Chemiosmosis</button>
+        <button class="pq-opt" onclick="checkPQ('pq4a',this,false)">Photophosphorylation</button>
+      </div>
+      <div class="pq-feedback" id="pq4a-fb"></div>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>The payoff phase oxidizes each G3P to pyruvate, producing ATP by substrate-level phosphorylation at steps 7 and 10, and NADH at step 6. Everything below is doubled for per-glucose totals.</p>
+    <table class="step-table">
+      <thead><tr><th>Step</th><th>Enzyme</th><th>Reaction</th><th>Energy</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="step-num-cell">6</td><td class="enzyme-name">GAPDH</td><td>G3P + NAD⁺ + Pᵢ → 1,3-BPG + NADH</td><td class="energy-cell energy-harvest">+NADH</td><td>Coupled oxidation and phosphorylation; produces high-energy acyl-phosphate bond</td></tr>
+        <tr><td class="step-num-cell">7</td><td class="enzyme-name">Phosphoglycerate kinase</td><td>1,3-BPG + ADP → 3-PG + ATP</td><td class="energy-cell energy-harvest">+1 ATP</td><td>Substrate-level phosphorylation; reversible (used in gluconeogenesis)</td></tr>
+        <tr><td class="step-num-cell">8</td><td class="enzyme-name">Phosphoglycerate mutase</td><td>3-PG → 2-PG</td><td>0</td><td>Moves phosphate from C3 to C2; requires 2,3-bisphosphoglycerate cofactor</td></tr>
+        <tr><td class="step-num-cell">9</td><td class="enzyme-name">Enolase</td><td>2-PG → PEP + H₂O</td><td>0</td><td>Dehydration; creates very high-energy enol-phosphate bond in PEP</td></tr>
+        <tr><td class="step-num-cell">10</td><td class="enzyme-name">Pyruvate kinase</td><td>PEP + ADP → Pyruvate + ATP</td><td class="energy-cell energy-harvest">+1 ATP</td><td>Irreversible; allosterically regulated; produces final product pyruvate</td></tr>
+      </tbody>
+    </table>
+    <div class="callout pitfall">
+      <div class="callout-label">Common Mistake</div>
+      <p>Students often say glycolysis yields "2 ATP." Be precise: it produces 4 ATP and 2 NADH, with a net gain of 2 ATP because 2 were consumed in phase 1. On exam questions asking about "yield" vs. "net yield," these are different answers.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">Why is PEP Such a High-Energy Molecule?</span></div>
+      <div class="we-body">
+        <p>Phosphoenolpyruvate (PEP) has a very high phosphate transfer potential (ΔG°' of hydrolysis = −14.8 kcal/mol, compared to ATP at −7.3 kcal/mol). When pyruvate kinase transfers PEP's phosphate to ADP, it is thermodynamically very favorable. The reason PEP is so energetic is that when the phosphate leaves, pyruvate rearranges from an unstable enol form to a stable keto form — this tautomerization releases additional energy.</p>
+      </div>
+    </div>
+    <div class="practice-q" id="pq4b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">How many total NADH are produced during glycolysis of one glucose molecule?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq4b',this,false)">1 NADH</button>
+        <button class="pq-opt" onclick="checkPQ('pq4b',this,true)">2 NADH</button>
+        <button class="pq-opt" onclick="checkPQ('pq4b',this,false)">4 NADH</button>
+        <button class="pq-opt" onclick="checkPQ('pq4b',this,false)">6 NADH</button>
+      </div>
+      <div class="pq-feedback" id="pq4b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>The payoff phase couples aldehyde oxidation to phosphorylation (step 6) and transfers the resulting high-energy phosphates to ADP at two substrate-level phosphorylation steps (steps 7 and 10). Key mechanistic and regulatory details are outlined below.</p>
+    <table class="step-table">
+      <thead><tr><th>Step</th><th>Enzyme</th><th>ΔG°' (kcal/mol)</th><th>Mechanism / Clinical / Regulation</th></tr></thead>
+      <tbody>
+        <tr><td class="step-num-cell">6</td><td class="enzyme-name">GAPDH</td><td>+1.5 (≈0 in vivo)</td><td>Cys-SH nucleophile forms thiohemiacetal; NAD⁺ oxidizes to NADH; inorganic phosphate attacks → acyl-phosphate (1,3-BPG). Inhibited by iodoacetate (and arsenate replaces Pᵢ, producing 1-arseno-3-PG that spontaneously hydrolyzes, uncoupling substrate-level phosphorylation — arsenic poisoning mechanism).</td></tr>
+        <tr><td class="step-num-cell">7</td><td class="enzyme-name">Phosphoglycerate kinase</td><td>−4.5</td><td>Mg²⁺-dependent; name is "backwards" — kinase adds phosphate to ADP from substrate. Reversible in gluconeogenesis (uses ATP to regenerate 1,3-BPG).</td></tr>
+        <tr><td class="step-num-cell">8</td><td class="enzyme-name">Phosphoglycerate mutase</td><td>+0.1</td><td>2,3-BPG-dependent (in vertebrates); enzyme itself is transiently phosphorylated. Note: 2,3-BPG in red cells is an important allosteric regulator of hemoglobin oxygen affinity.</td></tr>
+        <tr><td class="step-num-cell">9</td><td class="enzyme-name">Enolase</td><td>+0.4</td><td>Mg²⁺-dependent dehydration; inhibited by fluoride (F⁻ forms Mg-F-phosphate complex — used in dental products and to preserve blood glucose samples in fluoride tubes).</td></tr>
+        <tr><td class="step-num-cell">10</td><td class="enzyme-name">Pyruvate kinase</td><td>−7.5</td><td>Irreversible; activated by F-1,6-bisP (feedforward activation), AMP; inhibited by ATP, alanine, acetyl-CoA. Liver PK-L is also inhibited by phosphorylation via PKA (glucagon signaling). PK-M2 isoform dominates in cancer cells (Warburg). Enol-keto tautomerization drives thermodynamics.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical: Pyruvate Kinase Deficiency</div>
+      <p>PK deficiency is the most common enzymatic cause of hereditary non-spherocytic hemolytic anemia. RBCs have no mitochondria and depend entirely on glycolysis for ATP. PK deficiency → less ATP → pump failure → RBC lysis. Paradoxically, 2,3-BPG accumulates (step 8 backs up), which improves O₂ delivery to tissues — a partial metabolic compensation. Diagnosed by enzyme assay; treatment includes splenectomy and, in severe cases, transfusion or gene therapy.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">Arsenic Poisoning and GAPDH</span></div>
+      <div class="we-body">
+        <div class="we-step"><span class="we-step-num">1</span><span>Arsenate (AsO₄³⁻) is a structural analog of inorganic phosphate (PO₄³⁻). It competes with Pᵢ at the GAPDH reaction (step 6).</span></div>
+        <div class="we-step"><span class="we-step-num">2</span><span>GAPDH accepts arsenate, producing 1-arseno-3-phosphoglycerate instead of 1,3-BPG.</span></div>
+        <div class="we-step"><span class="we-step-num">3</span><span>1-arseno-3-PG spontaneously hydrolyzes (unlike 1,3-BPG, which requires phosphoglycerate kinase).</span></div>
+        <div class="we-step"><span class="we-step-num">4</span><span>Result: The energy from step 6 is wasted as heat rather than captured in 1,3-BPG. Step 7 (PGK) has no substrate → no ATP at step 7.</span></div>
+        <div class="we-step"><span class="we-step-num">5</span><span>Net effect: Glycolysis uncoupled — glucose is still consumed, but ATP is not generated at step 7. Cells become energy-depleted. This explains why arsenic is acutely toxic.</span></div>
+      </div>
+    </div>
+    <div class="practice-q" id="pq4c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">Fluoride preserves blood glucose in lab collection tubes by inhibiting which glycolytic enzyme?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq4c',this,false)">GAPDH</button>
+        <button class="pq-opt" onclick="checkPQ('pq4c',this,false)">Pyruvate kinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq4c',this,true)">Enolase</button>
+        <button class="pq-opt" onclick="checkPQ('pq4c',this,false)">Phosphoglycerate mutase</button>
+      </div>
+      <div class="pq-feedback" id="pq4c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 5: REGULATION ===== -->
+<div class="section-card" id="sec5">
+  <h2><span class="sec-num">05</span> Regulation of Glycolysis</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Your body does not run glycolysis at full speed all the time. That would be wasteful. Instead, your cells have built-in speed controls. Three enzymes act as the main brakes and accelerators.</p>
+    <p><strong>Hexokinase</strong> (step 1) slows down automatically when glucose-6-phosphate piles up — a simple "backup" sensor. <strong>PFK</strong> (step 3) is the main throttle. When you have lots of ATP, PFK slows down (no need to make more energy). When ATP is low and AMP is high, PFK speeds up. <strong>Pyruvate kinase</strong> (step 10) slows down when there is plenty of ATP and speeds up when the pathway is running fast.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">Key Idea</div>
+      <p>Think of it like a smart car engine. When the battery (ATP) is full, the engine (glycolysis) idles. When the battery drains (low ATP, high AMP), the engine revs up automatically.</p>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>Glycolytic flux is primarily regulated at the three irreversible steps (1, 3, and 10). The most important regulatory enzyme is <strong>PFK-1</strong>.</p>
+    <table class="step-table">
+      <thead><tr><th>Enzyme</th><th>Activators</th><th>Inhibitors</th><th>Logic</th></tr></thead>
+      <tbody>
+        <tr><td class="enzyme-name">Hexokinase</td><td>Glucose</td><td>Glucose-6-phosphate (product inhibition)</td><td>Prevents glucose trapping when downstream is saturated</td></tr>
+        <tr><td class="enzyme-name">PFK-1 (main throttle)</td><td>AMP, ADP, F-2,6-bisP</td><td>ATP (high), citrate, H⁺</td><td>Runs fast when energy is low; slows when energy is high or TCA intermediates accumulate</td></tr>
+        <tr><td class="enzyme-name">Pyruvate kinase</td><td>F-1,6-bisP (feedforward), AMP</td><td>ATP, alanine, acetyl-CoA</td><td>Feedforward by its own upstream substrate; slows when amino acids available</td></tr>
+      </tbody>
+    </table>
+    <div class="callout mnemonic">
+      <div class="callout-label">Mnemonic — PFK Inhibitors</div>
+      <p>"<strong>A</strong>TP <strong>C</strong>uts <strong>H</strong>igh-speed Flux" = ATP, Citrate, H⁺ all inhibit PFK-1.</p>
+    </div>
+    <div class="practice-q" id="pq5b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">High citrate levels inhibit PFK-1. Why does this make metabolic sense?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq5b',this,false)">Citrate is toxic and must be removed before glycolysis can continue</button>
+        <button class="pq-opt" onclick="checkPQ('pq5b',this,true)">High citrate signals the TCA cycle is well-supplied and no more pyruvate is needed</button>
+        <button class="pq-opt" onclick="checkPQ('pq5b',this,false)">Citrate directly inhibits ATP synthesis</button>
+        <button class="pq-opt" onclick="checkPQ('pq5b',this,false)">Citrate is an activator of hexokinase, shifting control to step 1</button>
+      </div>
+      <div class="pq-feedback" id="pq5b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>Glycolytic regulation operates at three levels: substrate availability, allosteric control, and hormonal/covalent modification. The key regulatory node is PFK-1, subject to at least six allosteric effectors and positioned at the committed step.</p>
+    <p><strong>F-2,6-bisP</strong> deserves special emphasis. It is synthesized by PFK-2 (a bifunctional enzyme) and is distinct from F-1,6-bisP. In the liver: insulin → PP2A activation → PFK-2 active → F-2,6-bisP high → PFK-1 active → glycolysis on. Glucagon → PKA → PFK-2 phosphorylated → FBPase-2 domain active → F-2,6-bisP drops → PFK-1 inhibited → gluconeogenesis favored. In muscle: F-2,6-bisP is less significant for regulation; AMP/ATP ratio dominates via AMP kinase (AMPK) signaling.</p>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical: AMPK and Metformin</div>
+      <p>Metformin, the most prescribed diabetes drug, inhibits Complex I of the electron transport chain → ATP drops → AMP/ATP rises → AMPK activated → AMPK phosphorylates and inhibits ACC (fatty acid synthesis off) and stimulates GLUT4 translocation and glycolysis. AMPK is sometimes called the "fuel gauge" of the cell. This is why metformin lowers blood glucose without causing hypoglycemia — it does not directly stimulate insulin secretion.</p>
+    </div>
+    <div class="practice-q" id="pq5c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">In hepatocytes, glucagon signaling leads to decreased glycolytic flux. The mechanism involves:</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq5c',this,false)">Direct inhibition of hexokinase by glucagon receptor activation</button>
+        <button class="pq-opt" onclick="checkPQ('pq5c',this,true)">PKA phosphorylation of PFK-2 activating its FBPase-2 domain, lowering F-2,6-bisP</button>
+        <button class="pq-opt" onclick="checkPQ('pq5c',this,false)">Glucagon increasing AMP levels which inhibit PFK-1</button>
+        <button class="pq-opt" onclick="checkPQ('pq5c',this,false)">Glucagon directly phosphorylating and inhibiting PFK-1</button>
+      </div>
+      <div class="pq-feedback" id="pq5c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: FATE OF PYRUVATE ===== -->
+<div class="section-card" id="sec6">
+  <h2><span class="sec-num">06</span> Fate of Pyruvate</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Pyruvate is the final product of glycolysis. What happens to it next depends on whether your cells have oxygen available.</p>
+    <p><strong>With oxygen:</strong> Pyruvate moves into the mitochondria and is converted to acetyl-CoA, which enters the Krebs cycle. This pathway extracts much more energy from glucose — about 30 more ATP per glucose beyond what glycolysis made.</p>
+    <p><strong>Without oxygen (in muscles during intense exercise):</strong> Pyruvate is converted to lactate. This regenerates NAD⁺, which glycolysis needs to keep running. Without this "recycling," glycolysis would stop. This is why muscles can sprint even when you are out of breath.</p>
+    <p><strong>In yeast:</strong> Pyruvate becomes ethanol and CO₂ — that is how beer and bread are made.</p>
+    <div class="callout pitfall">
+      <div class="callout-label">Common Misconception</div>
+      <p>Lactic acid does NOT cause muscle soreness. The burn you feel during exercise is from acid (H⁺ ions), not lactate itself. The soreness you feel a day or two later (DOMS) is from muscle fiber damage — nothing to do with lactate.</p>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>Pyruvate sits at a critical metabolic crossroads. Its route depends primarily on oxygen availability and the cell's energy state.</p>
+    <p><strong>Aerobic conditions:</strong> The pyruvate dehydrogenase complex (PDC) in the mitochondrial matrix converts pyruvate to acetyl-CoA + CO₂ + NADH. Acetyl-CoA feeds the TCA cycle. This is the high-yield path — the Krebs cycle and oxidative phosphorylation generate approximately 30–32 ATP per glucose.</p>
+    <p><strong>Anaerobic (lactic acid fermentation):</strong> Lactate dehydrogenase converts pyruvate to lactate, oxidizing NADH back to NAD⁺. This NAD⁺ regeneration is the point — it lets glycolysis continue producing ATP when oxygen is absent. The lactate is exported and can be converted back to glucose in the liver (Cori cycle).</p>
+    <p><strong>Alcoholic fermentation (yeast):</strong> Pyruvate decarboxylase removes CO₂, making acetaldehyde, then alcohol dehydrogenase reduces acetaldehyde to ethanol using NADH → NAD⁺.</p>
+    <div class="formula-box">
+      <div class="formula-label">Pyruvate Dehydrogenase Reaction</div>
+      Pyruvate + NAD⁺ + CoA → Acetyl-CoA + CO₂ + NADH  (ΔG°' = −8 kcal/mol)
+    </div>
+    <div class="callout mnemonic">
+      <div class="callout-label">Mnemonic — PDC Cofactors</div>
+      <p>"<strong>T</strong>ender <strong>L</strong>oving <strong>C</strong>are <strong>F</strong>or <strong>N</strong>ancy" = TPP (B1), Lipoic acid, CoA (B5), FAD (B2), NAD⁺ (B3). Five cofactors from five vitamins.</p>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>The pyruvate dehydrogenase complex (PDC) is a massive multi-enzyme complex (~10 MDa) residing in the mitochondrial matrix. It consists of E1 (pyruvate decarboxylase, requires TPP), E2 (dihydrolipoamide acetyltransferase, requires lipoic acid and CoA), and E3 (dihydrolipoamide dehydrogenase, requires FAD and NAD⁺). The complex is regulated by phosphorylation: PDK (pyruvate dehydrogenase kinase) phosphorylates and inactivates E1; PDP (phosphatase) reactivates it.</p>
+    <p>PDK is activated by acetyl-CoA, NADH, ATP (signals of energy excess — "no more input needed"). PDK is inhibited by pyruvate, CoA, NAD⁺, ADP (signals of low energy — "need more acetyl-CoA"). In the fed state, insulin activates PDP → PDC active. In fasting, glucagon/catecholamines activate PDK → PDC inhibited → pyruvate shunted to oxaloacetate via pyruvate carboxylase for gluconeogenesis.</p>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical: PDC Deficiency and Thiamine Deficiency</div>
+      <p>PDC deficiency causes lactic acidosis (pyruvate backs up, converted to lactate) with neurological damage, because neurons are especially dependent on glucose oxidation. Thiamine (B1) deficiency (Wernicke-Korsakoff syndrome, common in alcoholism) also impairs PDC (and α-ketoglutarate dehydrogenase in TCA), producing similar lactic acidosis. Treatment: high-dose IV thiamine before giving glucose — giving glucose first to a thiamine-deficient patient worsens the crisis by demanding more PDC activity than can be supplied.</p>
+    </div>
+    <div class="formula-box">
+      <div class="formula-label">PDC Net Reaction</div>
+      Pyruvate + NAD⁺ + CoA-SH → Acetyl-CoA + CO₂ + NADH    ΔG°' = −8.0 kcal/mol (irreversible)
+    </div>
+    <div class="practice-q" id="pq6c">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">A patient with alcoholism presents with confusion, ataxia, and eye movement abnormalities. Labs show elevated blood pyruvate and lactate. The attending gives IV glucose before thiamine — the patient worsens. Why?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq6c',this,false)">Glucose competes with thiamine for the same transporter</button>
+        <button class="pq-opt" onclick="checkPQ('pq6c',this,true)">Extra glucose increases glycolytic flux → more pyruvate overwhelms the already-limited PDC → worsens lactic acidosis</button>
+        <button class="pq-opt" onclick="checkPQ('pq6c',this,false)">Glucose activates PDK, phosphorylating and inactivating PDC directly</button>
+        <button class="pq-opt" onclick="checkPQ('pq6c',this,false)">Glucose directly inhibits thiamine absorption from the gut</button>
+      </div>
+      <div class="pq-feedback" id="pq6c-fb"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 7: PENTOSE PHOSPHATE SHUNT ===== -->
+<div class="section-card" id="sec7">
+  <h2><span class="sec-num">07</span> Pentose Phosphate Shunt (PPP)</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Glycolysis is not the only thing cells can do with glucose-6-phosphate. The <strong>pentose phosphate pathway</strong> (also called the pentose phosphate shunt or hexose monophosphate shunt) is a side road that branches off right after step 1 of glycolysis.</p>
+    <p>Instead of making ATP, this pathway makes two very important things: <strong>NADPH</strong> (a different kind of electron carrier, used to make and protect molecules) and <strong>ribose-5-phosphate</strong> (the sugar backbone needed to build DNA and RNA).</p>
+    <div class="callout analogy">
+      <div class="callout-label">Think of It This Way</div>
+      <p>If glycolysis is your city's power plant, the pentose phosphate shunt is the water treatment plant and the factory supply warehouse. It does not generate electricity (ATP). Instead, it makes the protective chemicals (NADPH for antioxidant defense) and the raw materials (ribose for building genetic blueprints).</p>
+    </div>
+    <p>NADPH is especially important in red blood cells, which use it to keep an antioxidant called glutathione active. Without enough NADPH, red blood cells fall apart when exposed to oxidative stress — this is what happens in G6PD deficiency, a common inherited condition.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">Key Products</div>
+      <p>NADPH: for fatty acid synthesis, antioxidant defense, steroid synthesis. Ribose-5-phosphate: for DNA, RNA, ATP, CoA, and other nucleotides.</p>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>The pentose phosphate pathway (PPP) branches from glycolysis at glucose-6-phosphate. It has two phases:</p>
+    <p><strong>Oxidative phase</strong> (irreversible): G6P is oxidized by glucose-6-phosphate dehydrogenase (G6PD) to produce 2 NADPH and ribulose-5-phosphate (a 5-carbon sugar) plus CO₂. NADPH is the key product here.</p>
+    <p><strong>Non-oxidative phase</strong> (reversible): Ribulose-5-phosphate is converted to ribose-5-phosphate (for nucleotide synthesis) or back to glycolytic intermediates (F6P and G3P) via transketolase and transaldolase reactions. This phase connects the PPP to glycolysis bidirectionally.</p>
+    <p>The pathway's emphasis depends on the cell's needs. High demand for NADPH (e.g., in fatty acid synthesis, antioxidant response) drives the oxidative phase. High demand for ribose (e.g., rapidly dividing cells) drives the non-oxidative phase. When both are available but energy is also needed, intermediates cycle back into glycolysis.</p>
+    <div class="callout clinic">
+      <div class="callout-label">G6PD Deficiency</div>
+      <p>G6PD deficiency is the most common enzyme deficiency worldwide (~400 million affected). Without G6PD, NADPH cannot be made. Without NADPH, glutathione cannot be kept reduced. Oxidative stress (from infections, certain drugs like primaquine, or fava beans) damages RBC membranes → hemolytic anemia. This is actually protective against malaria — oxidative stress in G6PD-deficient RBCs kills the Plasmodium parasite.</p>
+    </div>
+    <div class="practice-q" id="pq7b">
+      <div class="pq-header">&#128161; Quick Check</div>
+      <div class="pq-q">A rapidly dividing cancer cell needs large amounts of ribose-5-phosphate for DNA synthesis. Which enzyme is the critical first step of the pathway that provides it?</div>
+      <div class="pq-options">
+        <button class="pq-opt" onclick="checkPQ('pq7b',this,false)">Hexokinase</button>
+        <button class="pq-opt" onclick="checkPQ('pq7b',this,true)">Glucose-6-phosphate dehydrogenase (G6PD)</button>
+        <button class="pq-opt" onclick="checkPQ('pq7b',this,false)">Transketolase</button>
+        <button class="pq-opt" onclick="checkPQ('pq7b',this,false)">Phosphofructokinase-1</button>
+      </div>
+      <div class="pq-feedback" id="pq7b-fb"></div>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>The PPP is the primary source of cellular NADPH and ribose-5-phosphate. The oxidative phase is irreversible and generates 2 NADPH and 1 CO₂ per G6P. Rate-limiting enzyme: G6PD, activated by NADP⁺ and inhibited by NADPH (product). The non-oxidative phase is reversible and connects the PPP to glycolysis/gluconeogenesis via transketolase (TPP-dependent, requires B1) and transaldolase.</p>
+    <p>NADPH serves multiple functions: (1) reductive biosynthesis — fatty acid synthesis (FAS, needs 14 NADPH per palmitate), cholesterol synthesis; (2) antioxidant — glutathione reductase uses NADPH to regenerate GSH from GSSG; (3) ROS production — NADPH oxidase in phagocytes generates superoxide for killing bacteria; (4) cytochrome P450 reactions in the liver (drug metabolism, steroidogenesis).</p>
+    <div class="formula-box">
+      <div class="formula-label">Oxidative Phase (overall per G6P)</div>
+      G6P + 2 NADP⁺ + H₂O → Ribulose-5-P + CO₂ + 2 NADPH + 2 H⁺
+    </div>
+    <div class="callout clinic">
+      <div class="callout-label">Clinical: G6PD Deficiency and the Warburg Connection</div>
+      <p>G6PD is upregulated in many cancers — cancer cells need NADPH for fatty acid synthesis (building new membranes) and for antioxidant defense against their own high ROS production. The non-oxidative phase also provides ribose-5-phosphate for nucleotide synthesis in rapidly dividing cells. This is why the Warburg effect (aerobic glycolysis) in cancer is not the full picture — G6P also diverts to the PPP. Targeting G6PD is an active area of anti-cancer drug development.</p>
+    </div>
+    <div class="worked-example">
+      <div class="we-header"><span class="we-badge">Worked Example</span><span class="we-title">NADPH vs. NADH — Why Two Different Carriers?</span></div>
+      <div class="we-body">
+        <p>NADH and NADPH are chemically nearly identical, differing only by a phosphate group on the 2' ribose of the adenine nucleotide. But they serve opposite metabolic roles:</p>
+        <div class="we-step"><span class="we-step-num">1</span><span>NADH is produced in catabolic pathways (glycolysis, TCA) and is oxidized by the ETC to generate ATP. It is a "currency" for catabolism.</span></div>
+        <div class="we-step"><span class="we-step-num">2</span><span>NADPH is produced by the PPP (and isocitrate dehydrogenase and malic enzyme in the cytosol) and is used in anabolic reactions. Cells maintain a high NADPH/NADP⁺ ratio (anabolic conditions) simultaneously with a high NAD⁺/NADH ratio (needed for catabolic flux). Keeping them separate prevents metabolic futile cycling.</span></div>
+        <div class="we-step"><span class="we-step-num">3</span><span>Different enzyme active sites distinguish NADPH from NADH by recognizing the 2'-phosphate — a single group that routes the molecule to entirely different metabolic fates.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 8: CONNECTIONS TO FULL METABOLISM ===== -->
+<div class="section-card" id="sec8">
+  <h2><span class="sec-num">08</span> Connections to the Full Metabolic Network</h2>
+
+  <!-- BASIC -->
+  <div class="level-content active" data-level="basic">
+    <p>Glycolysis does not exist alone — it is the gateway to everything else. Pyruvate flows into the Krebs cycle (our next module), where far more energy is extracted. The NADH made in glycolysis eventually feeds into the electron transport chain to make more ATP. The pentose phosphate shunt provides building blocks. And the whole system can run in reverse during fasting — a process called gluconeogenesis — when your liver makes new glucose to keep your blood sugar up.</p>
+    <p>Here is a map of the key connections. The next three modules in this series will take you through each pathway in depth.</p>
+    <div class="callout keyidea">
+      <div class="callout-label">The Metabolic Web</div>
+      <p>Glucose → Glycolysis → Pyruvate → Krebs Cycle → Electron Transport Chain (ATP). Branch: G6P → Pentose Phosphate Shunt (NADPH + ribose). Reverse: Gluconeogenesis (rebuild glucose from non-sugar sources). Coming up: Module 2 covers Krebs, Module 3 covers oxidative phosphorylation.</p>
+    </div>
+  </div>
+
+  <!-- HIGH SCHOOL -->
+  <div class="level-content" data-level="hs">
+    <p>Glycolysis intersects with virtually every other metabolic pathway. G6P is a central branch point: it routes to glycolysis, the PPP, or glycogen synthesis. Pyruvate branches to the Krebs cycle (aerobic), lactate (anaerobic), or gluconeogenesis precursors. Intermediates feed amino acid synthesis (3-phosphoglycerate → serine → glycine and cysteine; pyruvate → alanine by transamination).</p>
+    <p>Gluconeogenesis reverses most of glycolysis using the same enzymes (the 7 near-equilibrium steps), but bypasses the three irreversible steps using glucose-6-phosphatase, fructose-1,6-bisphosphatase, and the pyruvate carboxylase/PEPCK pair. It occurs primarily in the liver during fasting.</p>
+    <div class="callout mnemonic">
+      <div class="callout-label">Series Preview</div>
+      <p>Module 2 (Krebs): Acetyl-CoA + OAA → 8-step cycle → 3 NADH, 1 FADH₂, 1 GTP, 2 CO₂ per turn. Module 3 (Oxidative Phosphorylation): NADH and FADH₂ feed the ETC; ~32 ATP per glucose made here. Glycolysis contributes only ~7% of the total ATP yield from glucose oxidation — the other 93% comes from the mitochondria.</p>
+    </div>
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="level-content" data-level="college">
+    <p>Glycolytic intermediates serve as biosynthetic precursors across multiple pathways. G6P feeds glycogen synthesis (UDP-glucose pathway) and the PPP. F6P and G3P are PPP non-oxidative phase entry points. 3-phosphoglycerate → serine (and thus glycine, cysteine, folate cycle). Pyruvate → alanine (ALT reaction), acetyl-CoA (PDC), oxaloacetate (pyruvate carboxylase, for gluconeogenesis and TCA anaplerosis).</p>
+    <p>The overall ATP yield from complete glucose oxidation (glycolysis + PDC + TCA + OxPhos) is approximately 30–32 ATP per glucose under physiological conditions (using P/O ratios of ~2.5 for NADH and ~1.5 for FADH₂ at Complex V). Glycolysis contributes only 2 net ATP directly — the major yield comes from oxidative phosphorylation driven by the 10 NADH and 2 FADH₂ generated between glycolysis and the TCA cycle.</p>
+    <div class="callout clinic">
+      <div class="callout-label">Integration: Why Cancer Cells Use Aerobic Glycolysis</div>
+      <p>In proliferating cells, the Warburg effect serves purposes beyond ATP: (1) G6P → PPP → NADPH for lipid synthesis and ROS buffering; (2) 3-PG → serine, glycine, one-carbon metabolism for nucleotide synthesis; (3) pyruvate → acetyl-CoA → lipid synthesis (mem­brane building). Cells that grow need carbon frames, not just energy — glycolysis provides the biosynthetic intermediates. OxPhos produces more ATP but consumes intermediates rather than feeding biosynthesis.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MULTIPLE CHOICE QUIZ ===== -->
+<div class="quiz-section" id="quiz">
+  <h2>Multiple Choice Quiz</h2>
+  <p class="section-sub">35 questions covering all topics. Click an option to check your answer immediately.</p>
+
+  <div id="quiz-questions"></div>
+
+  <div class="quiz-score-bar" id="quiz-score-bar">
+    <div class="score-label">FINAL SCORE</div>
+    <div class="score-val" id="score-val">—</div>
+    <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div class="fc-section" id="flashcards">
+  <h2>Flashcards</h2>
+  <p class="fc-sub">Click any card to flip it. Filter by category below.</p>
+  <div class="fc-filter-bar" id="fc-filters"></div>
+  <div class="fc-grid" id="fc-grid"></div>
+</div>
+
+<!-- ===== SHORT ANSWER ===== -->
+<div class="sa-section" id="shortanswer">
+  <h2>Short Answer Questions</h2>
+  <p class="sa-sub">18 questions at increasing depth. The grader checks for key concepts — be thorough. Expand model answers to compare your reasoning.</p>
+  <div id="sa-questions"></div>
+</div>
+
+</div><!-- end page-wrap -->
+
+<script>
+// ========== LEVEL SWITCHER ==========
+const levelNames = { basic: '8th Grade', hs: 'High School Junior', college: 'College / Pre-Med' };
+function setLevel(lv) {
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.toggle('active', b.dataset.level === lv));
+  document.querySelectorAll('.level-content').forEach(el => el.classList.toggle('active', el.dataset.level === lv));
+  document.getElementById('level-name').textContent = levelNames[lv];
+}
+
+// ========== INLINE PRACTICE Q ==========
+function checkPQ(id, btn, correct) {
+  const container = document.getElementById(id);
+  if (container.dataset.answered) return;
+  container.dataset.answered = '1';
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById(id + '-fb');
+  fb.textContent = correct ? '✓ Correct!' : '✗ Not quite. Review the section above for the answer.';
+  fb.className = 'pq-feedback show ' + (correct ? 'correct' : 'wrong');
+  container.querySelectorAll('.pq-opt').forEach(o => { o.disabled = true; if (o !== btn && o.dataset.correct) o.classList.add('correct'); });
+}
+
+// ========== QUIZ DATA ==========
+const quizData = [
+  { q: "Which molecule is the starting substrate of glycolysis?", opts: ["Fructose","Pyruvate","Glucose","Acetyl-CoA"], ans: 2, exp: "Glycolysis begins with glucose (a 6-carbon sugar), though other hexoses can enter after conversion to G6P or F6P." },
+  { q: "Where does glycolysis occur in the cell?", opts: ["Mitochondrial matrix","Intermembrane space","Nucleus","Cytosol"], ans: 3, exp: "All ten steps of glycolysis occur in the cytosol (cytoplasm). No organelle membrane is required." },
+  { q: "How many net ATP are produced per glucose during glycolysis?", opts: ["4","1","2","38"], ans: 2, exp: "4 ATP are produced but 2 are consumed in the investment phase, leaving a net of 2 ATP per glucose." },
+  { q: "Which enzyme catalyzes the committed, rate-limiting step of glycolysis?", opts: ["Hexokinase","Aldolase","Pyruvate kinase","Phosphofructokinase-1"], ans: 3, exp: "PFK-1 at step 3 is the primary rate-limiting enzyme and the major point of allosteric regulation in glycolysis." },
+  { q: "What molecule does hexokinase add to glucose in step 1?", opts: ["A sulfate group","An acetyl group","A phosphate group","A methyl group"], ans: 2, exp: "Hexokinase transfers a phosphate group from ATP to glucose, trapping glucose inside the cell as glucose-6-phosphate." },
+  { q: "What are the two products of aldolase (step 4)?", opts: ["Two G3P molecules","G3P and DHAP","Pyruvate and G3P","F6P and G3P"], ans: 1, exp: "Aldolase cleaves fructose-1,6-bisphosphate into glyceraldehyde-3-phosphate (G3P) and dihydroxyacetone phosphate (DHAP)." },
+  { q: "Triose phosphate isomerase converts DHAP into:", opts: ["Pyruvate","Fructose-6-phosphate","Glyceraldehyde-3-phosphate","1,3-bisphosphoglycerate"], ans: 2, exp: "TPI interconverts DHAP and G3P, ensuring both 3-carbon fragments from aldolase can proceed through phase 2." },
+  { q: "What type of ATP synthesis occurs at steps 7 and 10 of glycolysis?", opts: ["Oxidative phosphorylation","Photophosphorylation","Substrate-level phosphorylation","Chemiosmotic phosphorylation"], ans: 2, exp: "Substrate-level phosphorylation: a high-energy phosphate is transferred directly from a substrate to ADP without using a proton gradient." },
+  { q: "GAPDH (step 6) requires which cofactor as an electron acceptor?", opts: ["FAD","NADP⁺","NAD⁺","CoA"], ans: 2, exp: "GAPDH oxidizes G3P using NAD⁺ as the electron acceptor, producing NADH and the high-energy intermediate 1,3-bisphosphoglycerate." },
+  { q: "High ATP levels _______ PFK-1 activity.", opts: ["Activate","Eliminate","Inhibit","Have no effect on"], ans: 2, exp: "High ATP allosterically inhibits PFK-1, slowing glycolysis when the cell's energy needs are already met — a feedback mechanism." },
+  { q: "Which molecule is an allosteric activator of PFK-1 produced in the fed state under insulin signaling?", opts: ["Citrate","AMP","Fructose-2,6-bisphosphate","ATP"], ans: 2, exp: "Fructose-2,6-bisphosphate is the most potent activator of PFK-1. Insulin stimulates its production via PFK-2 activation." },
+  { q: "Under anaerobic conditions, pyruvate is converted to lactate to regenerate:", opts: ["ATP","CoA","FADH₂","NAD⁺"], ans: 3, exp: "Lactate dehydrogenase reduces pyruvate to lactate while oxidizing NADH to NAD⁺. This NAD⁺ is essential for GAPDH to continue running glycolysis." },
+  { q: "Pyruvate dehydrogenase complex (PDC) converts pyruvate to:", opts: ["Lactate","Acetyl-CoA","Oxaloacetate","Glucose-6-phosphate"], ans: 1, exp: "PDC converts pyruvate to acetyl-CoA + CO₂ + NADH, linking glycolysis to the TCA cycle. This is an irreversible oxidative decarboxylation." },
+  { q: "Which B vitamin is required as a cofactor for both PDC and transketolase (PPP)?", opts: ["B12 (cobalamin)","B6 (pyridoxine)","B1 (thiamine)","B3 (niacin)"], ans: 2, exp: "Thiamine (B1) is required as TPP (thiamine pyrophosphate) for both PDC (E1 subunit) and transketolase in the non-oxidative PPP." },
+  { q: "The pentose phosphate pathway branches from glycolysis at which intermediate?", opts: ["Pyruvate","Fructose-6-phosphate","Glucose-6-phosphate","G3P"], ans: 2, exp: "The PPP begins with glucose-6-phosphate, which is oxidized by G6PD. This branches right after hexokinase (step 1) of glycolysis." },
+  { q: "What is the primary product of the oxidative phase of the pentose phosphate pathway?", opts: ["ATP","Acetyl-CoA","NADPH","Pyruvate"], ans: 2, exp: "The oxidative phase produces 2 NADPH per glucose-6-phosphate oxidized, along with ribulose-5-phosphate and CO₂." },
+  { q: "G6PD deficiency leads to hemolytic anemia because red blood cells cannot produce enough:", opts: ["ATP via glycolysis","Hemoglobin","NADPH for glutathione regeneration","Pyruvate for the TCA cycle"], ans: 2, exp: "Without G6PD, RBCs cannot make NADPH via the PPP. Without NADPH, glutathione remains oxidized and cannot protect RBC membranes from oxidative damage." },
+  { q: "Phosphoenolpyruvate (PEP) is notable because:", opts: ["It has a very low phosphate transfer potential","It is the substrate for hexokinase","It has a higher phosphate transfer potential than ATP","It is made in the investment phase"], ans: 2, exp: "PEP has a ΔG°' of hydrolysis of −14.8 kcal/mol, much higher than ATP (−7.3). This drives the pyruvate kinase reaction strongly forward." },
+  { q: "In which tissue is glucokinase (hexokinase IV) primarily expressed?", opts: ["Skeletal muscle","Kidney","Liver and pancreatic beta cells","Neurons"], ans: 2, exp: "Glucokinase is expressed in hepatocytes and pancreatic beta cells, where it acts as a glucose sensor due to its low affinity and sigmoidal kinetics." },
+  { q: "Arsenate poisoning uncouples glycolysis primarily by competing with phosphate at which step?", opts: ["Step 1 (hexokinase)","Step 3 (PFK-1)","Step 6 (GAPDH)","Step 10 (pyruvate kinase)"], ans: 2, exp: "Arsenate substitutes for phosphate in the GAPDH reaction, producing 1-arseno-3-PG that spontaneously hydrolyzes — no 1,3-BPG is made and step 7 produces no ATP." },
+  { q: "Which glycolytic enzyme is inhibited by fluoride, which is why fluoride-containing tubes preserve blood glucose in labs?", opts: ["Hexokinase","Enolase","GAPDH","PFK-1"], ans: 1, exp: "Fluoride inhibits enolase (step 9) by forming a fluoride-phosphate-magnesium complex. This halts glycolysis in the blood sample, preventing glucose consumption by cells." },
+  { q: "Citrate inhibits PFK-1. This makes sense because high citrate indicates:", opts: ["The cell needs more glucose immediately","The TCA cycle is well-supplied and no more acetyl-CoA is needed","The pentose phosphate shunt is active","ATP synthesis in the mitochondria has failed"], ans: 1, exp: "Citrate is a TCA cycle intermediate exported to the cytosol when the cycle is saturated. Inhibiting PFK-1 slows glycolytic flux to match mitochondrial capacity." },
+  { q: "What is the Cori cycle?", opts: ["The cycle of glucose → pyruvate → acetyl-CoA → CO₂","Lactate produced in muscle is exported to the liver, converted back to glucose, and returned to muscle","The recycling of NAD⁺ in the mitochondria","The interconversion of G6P and F6P in the cytosol"], ans: 1, exp: "In the Cori cycle, muscle produces lactate during anaerobic exercise; the liver takes up the lactate, converts it to pyruvate and then glucose via gluconeogenesis, which returns to the muscle." },
+  { q: "Which isoform of pyruvate kinase is predominant in cancer cells and is associated with the Warburg effect?", opts: ["PK-L (liver)","PK-R (red cell)","PK-M1 (muscle)","PK-M2"], ans: 3, exp: "PK-M2 is expressed in cancer cells. It can be less active, causing a buildup of glycolytic intermediates that are diverted to biosynthetic pathways (PPP, serine synthesis) supporting rapid proliferation." },
+  { q: "How many NADH are produced per glucose during glycolysis?", opts: ["1","2","4","6"], ans: 1, exp: "One NADH is produced per G3P at step 6 (GAPDH). Since two G3P are made per glucose, the total is 2 NADH per glucose." },
+  { q: "Feedforward activation in glycolysis is best illustrated by:", opts: ["ATP inhibiting PFK-1","Fructose-1,6-bisphosphate activating pyruvate kinase","G6P inhibiting hexokinase","Citrate inhibiting PFK-1"], ans: 1, exp: "F-1,6-bisP (product of PFK-1) activates pyruvate kinase downstream — feedforward activation speeds up the end of the pathway when the middle is running fast." },
+  { q: "During fasting, glucagon activates PKA which phosphorylates the bifunctional enzyme PFK-2/FBPase-2. The result is:", opts: ["Elevated F-2,6-bisP and increased glycolysis","Decreased F-2,6-bisP and decreased PFK-1 activity","Elevated F-2,6-bisP and increased gluconeogenesis","No change in F-2,6-bisP; only PFK-1 is directly phosphorylated"], ans: 1, exp: "PKA phosphorylation activates the FBPase-2 domain and inactivates the PFK-2 domain, lowering F-2,6-bisP, which reduces PFK-1 activity and shifts the liver toward gluconeogenesis." },
+  { q: "Pyruvate kinase deficiency causes hemolytic anemia primarily because:", opts: ["RBCs lack mitochondria and depend solely on glycolysis for ATP","RBCs cannot make NADPH without pyruvate kinase","Pyruvate kinase deficiency blocks the PPP","Excess pyruvate is toxic to hemoglobin"], ans: 0, exp: "Red blood cells have no mitochondria. They depend 100% on glycolysis for ATP. PK deficiency reduces ATP output → pump failure → cell lysis." },
+  { q: "Which phase of the pentose phosphate pathway connects back to glycolysis?", opts: ["Oxidative phase","Reductive phase","Non-oxidative phase","Phosphorylation phase"], ans: 2, exp: "The non-oxidative phase uses transketolase and transaldolase to convert pentose phosphates back to F6P and G3P, which re-enter glycolysis." },
+  { q: "PDC is inhibited (inactivated) by phosphorylation from PDK. PDK is activated by:", opts: ["ADP, CoA, NAD⁺","Pyruvate, CoA, NAD⁺","Acetyl-CoA, NADH, ATP","AMP, CoA, FAD"], ans: 2, exp: "PDK is activated when energy and acetyl-CoA are abundant (high acetyl-CoA, NADH, ATP) — signaling that no more pyruvate conversion is needed." },
+  { q: "The net equation of glycolysis produces which set of products from one glucose?", opts: ["2 pyruvate + 2 ATP + 2 NADH","2 pyruvate + 4 ATP + 2 NADH","2 pyruvate + 2 ATP + 4 NADH","2 lactate + 2 ATP + 2 FADH₂"], ans: 0, exp: "Net: 2 pyruvate, 2 ATP (net; 4 produced − 2 consumed), 2 NADH, 2 H₂O." },
+  { q: "NADPH produced by the PPP is used for all of the following EXCEPT:", opts: ["Fatty acid synthesis","Driving the electron transport chain","Glutathione regeneration","Cytochrome P450 reactions"], ans: 1, exp: "The electron transport chain uses NADH (from catabolic reactions), not NADPH. NADPH is for biosynthesis and antioxidant defense." },
+  { q: "Why can acetyl-CoA NOT serve as a net precursor for glucose in gluconeogenesis?", opts: ["Acetyl-CoA cannot enter the mitochondria","The two carbons of acetyl-CoA are lost as CO₂ during two turns of the TCA cycle","Acetyl-CoA is immediately converted to ketone bodies","Acetyl-CoA inhibits gluconeogenic enzymes directly"], ans: 1, exp: "The two carbons entering as acetyl-CoA are released as 2 CO₂ per TCA turn, with no net carbon addition to oxaloacetate for gluconeogenesis." },
+  { q: "A patient with Wernicke-Korsakoff syndrome (thiamine deficiency) should receive thiamine BEFORE glucose because:", opts: ["Glucose inhibits thiamine absorption in the gut","Glucose competitively inhibits thiamine binding at PDC","Administering glucose increases pyruvate production, which overwhelms the already-impaired PDC, worsening lactic acidosis","Thiamine prevents glucose from entering cells by activating hexokinase inhibitors"], ans: 2, exp: "Thiamine deficiency impairs PDC. Extra glucose → more pyruvate → PDC overwhelmed → pyruvate diverted to lactate → worsening lactic acidosis. Thiamine first replenishes the PDC cofactor before glucose is given." },
+  { q: "Which of the following is TRUE about glucokinase compared to hexokinase?", opts: ["Glucokinase has a lower Km for glucose and is inhibited by G6P","Glucokinase has a higher Km for glucose and is not inhibited by G6P","Both have the same Km but differ in their subcellular location","Glucokinase is found in all tissues; hexokinase only in liver"], ans: 1, exp: "Glucokinase (hexokinase IV) has Km ≈10 mM (vs ~0.1 mM for hexokinase), is not inhibited by G6P, and shows sigmoidal kinetics — making it a glucose sensor active only at high postprandial glucose levels." }
+];
+
+let answered = 0;
+let correct = 0;
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-questions');
+  quizData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-item';
+    div.id = 'qi-' + i;
+    div.innerHTML = `
+      <div class="quiz-q-num">QUESTION ${i+1} / ${quizData.length}</div>
+      <div class="quiz-q-text">${item.q}</div>
+      <div class="quiz-opts">${item.opts.map((o,j) => `<button class="quiz-opt" onclick="answerQuiz(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="quiz-feedback" id="qfb-${i}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function answerQuiz(qi, oi) {
+  const item = quizData[qi];
+  const container = document.getElementById('qi-' + qi);
+  if (container.dataset.answered) return;
+  container.dataset.answered = '1';
+  const btns = container.querySelectorAll('.quiz-opt');
+  btns.forEach((b,j) => {
+    b.disabled = true;
+    if (j === item.ans) b.classList.add('correct');
+    if (j === oi && oi !== item.ans) b.classList.add('wrong');
+  });
+  const isCorrect = oi === item.ans;
+  if (isCorrect) correct++;
+  answered++;
+  const fb = document.getElementById('qfb-' + qi);
+  fb.textContent = (isCorrect ? '✓ Correct! ' : '✗ Incorrect. ') + item.exp;
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  if (answered === quizData.length) {
+    const pct = Math.round(correct / quizData.length * 100);
+    const bar = document.getElementById('quiz-score-bar');
+    bar.classList.add('show');
+    document.getElementById('score-val').textContent = correct + ' / ' + quizData.length + ' (' + pct + '%)';
+    const fill = document.getElementById('score-fill');
+    fill.style.background = pct >= 80 ? 'var(--accent)' : pct >= 60 ? 'var(--gold)' : 'var(--coral)';
+    setTimeout(() => fill.style.width = pct + '%', 100);
+  }
+}
+
+// ========== FLASHCARD DATA ==========
+const flashcards = [
+  { cat:'Overview', front:'What are the two phases of glycolysis?', back:'Investment phase (steps 1–5, costs 2 ATP) and Payoff phase (steps 6–10, produces 4 ATP + 2 NADH).' },
+  { cat:'Overview', front:'Net yield of glycolysis per glucose?', back:'2 ATP (net), 2 NADH, 2 pyruvate. Location: cytosol.' },
+  { cat:'Overview', front:'Is oxygen required for glycolysis?', back:'No — glycolysis is anaerobic. It is the only ATP-generating pathway that works without oxygen.' },
+  { cat:'Enzymes', front:'Enzyme at step 1 of glycolysis?', back:'Hexokinase (or glucokinase/hexokinase IV in liver/pancreas). Adds phosphate to glucose → G6P. Consumes 1 ATP.' },
+  { cat:'Enzymes', front:'What does phosphoglucose isomerase do?', back:'Converts glucose-6-phosphate (G6P) to fructose-6-phosphate (F6P) at step 2. Isomerization only — no energy change.' },
+  { cat:'Enzymes', front:'What does aldolase do?', back:'Cleaves fructose-1,6-bisphosphate into two 3-carbon molecules: DHAP and G3P (step 4).' },
+  { cat:'Enzymes', front:'Role of triose phosphate isomerase (TPI)?', back:'Interconverts DHAP and G3P (step 5). Ensures both 3-carbon fragments continue through phase 2. Nearly catalytically perfect.' },
+  { cat:'Enzymes', front:'What does GAPDH do (step 6)?', back:'Oxidizes G3P using NAD⁺ → NADH, and phosphorylates using inorganic phosphate → produces 1,3-bisphosphoglycerate (high energy acyl-phosphate).' },
+  { cat:'Enzymes', front:'What does enolase do (step 9)?', back:'Dehydrates 2-phosphoglycerate → phosphoenolpyruvate (PEP) + H₂O. PEP is a very high-energy phosphate compound. Inhibited by fluoride.' },
+  { cat:'Enzymes', front:'What does pyruvate kinase do (step 10)?', back:'Transfers phosphate from PEP to ADP → ATP + pyruvate. Substrate-level phosphorylation. Irreversible. Major regulatory step.' },
+  { cat:'Regulation', front:'Three irreversible steps of glycolysis?', back:'Steps 1 (hexokinase), 3 (PFK-1), and 10 (pyruvate kinase). These are bypassed in gluconeogenesis.' },
+  { cat:'Regulation', front:'PFK-1 activators and inhibitors?', back:'Activators: AMP, ADP, F-2,6-bisP. Inhibitors: ATP (high), citrate, H⁺. Most important activator: fructose-2,6-bisphosphate.' },
+  { cat:'Regulation', front:'What is F-2,6-bisP and who makes it?', back:'Fructose-2,6-bisphosphate — the most potent activator of PFK-1. Made by PFK-2 (bifunctional enzyme). Elevated in fed state by insulin.' },
+  { cat:'Regulation', front:'How does glucagon regulate glycolysis?', back:'Glucagon → PKA → phosphorylates PFK-2/FBPase-2 → FBPase-2 active → F-2,6-bisP drops → PFK-1 inhibited → glycolysis slows.' },
+  { cat:'Regulation', front:'What is feedforward activation in glycolysis?', back:'F-1,6-bisP (PFK-1 product) activates pyruvate kinase downstream. This speeds up step 10 when step 3 is running fast.' },
+  { cat:'Regulation', front:'Why is glucokinase considered a glucose sensor?', back:'High Km (~10 mM), not inhibited by G6P, sigmoidal kinetics. Only significantly active when blood glucose is high (postprandial). Found in liver and pancreatic beta cells.' },
+  { cat:'Pyruvate', front:'Three fates of pyruvate?', back:'1. Aerobic: → Acetyl-CoA (PDC, mitochondria). 2. Anaerobic: → Lactate (LDH, regenerates NAD⁺). 3. Yeast fermentation: → Ethanol + CO₂.' },
+  { cat:'Pyruvate', front:'What does PDC produce?', back:'Acetyl-CoA + CO₂ + NADH. Requires 5 cofactors: TPP (B1), Lipoic acid, CoA (B5), FAD (B2), NAD⁺ (B3). Irreversible.' },
+  { cat:'Pyruvate', front:'Why is NAD⁺ regeneration critical for anaerobic cells?', back:'GAPDH (step 6) requires NAD⁺. Without it, glycolysis stops. Lactate production from pyruvate regenerates NAD⁺, allowing continued ATP production.' },
+  { cat:'Pyruvate', front:'What is the Cori cycle?', back:'Muscle → lactate → blood → liver → gluconeogenesis → glucose → blood → muscle. Recycles lactate to glucose, shifting the metabolic burden to the liver.' },
+  { cat:'Pyruvate', front:'How does PDK regulate PDC?', back:'PDK phosphorylates PDC E1 subunit → inactivates it. PDK activated by: acetyl-CoA, NADH, ATP. PDK inhibited by: pyruvate, CoA, NAD⁺, ADP. PDC reactivated by PDP.' },
+  { cat:'PPP', front:'Two main products of the pentose phosphate pathway?', back:'NADPH (from oxidative phase) and ribose-5-phosphate (for nucleotide synthesis). Also produces CO₂.' },
+  { cat:'PPP', front:'What does G6PD do and why is it important?', back:'Glucose-6-phosphate dehydrogenase catalyzes the first, rate-limiting step of the PPP oxidative phase. Produces NADPH. Deficiency → hemolytic anemia under oxidative stress.' },
+  { cat:'PPP', front:'NADPH vs. NADH — key difference?', back:'NADH feeds the ETC (catabolic). NADPH is used for biosynthesis and antioxidant defense (anabolic). They differ by one 2'-phosphate group on the adenine ribose.' },
+  { cat:'PPP', front:'Which two enzymes link the PPP non-oxidative phase back to glycolysis?', back:'Transketolase (requires TPP/B1) and transaldolase. They convert pentose phosphates → F6P and G3P, which re-enter glycolysis.' },
+  { cat:'PPP', front:'Why does G6PD deficiency protect against malaria?', back:'P. falciparum in G6PD-deficient RBCs is exposed to higher oxidative stress and dies before completing its life cycle. This explains the high frequency of G6PD deficiency in malaria-endemic regions.' },
+  { cat:'Clinical', front:'Arsenic poisoning — glycolytic mechanism?', back:'Arsenate replaces phosphate at GAPDH (step 6) → 1-arseno-3-PG spontaneously hydrolyzes → no 1,3-BPG → step 7 makes no ATP → cells energy-depleted.' },
+  { cat:'Clinical', front:'Pyruvate kinase deficiency — clinical consequences?', back:'Hemolytic anemia. RBCs (no mitochondria) depend on glycolysis for ATP. PK deficiency → less ATP → membrane pump failure → lysis. 2,3-BPG accumulates → improved O₂ delivery.' },
+  { cat:'Clinical', front:'Thiamine (B1) deficiency — glycolytic impact?', back:'Impairs PDC (E1 requires TPP) → pyruvate backs up → converted to lactate → lactic acidosis. Also impairs α-KG dehydrogenase in TCA. Causes Wernicke-Korsakoff syndrome.' },
+  { cat:'Clinical', front:'Warburg effect — definition?', back:'Cancer cells use aerobic glycolysis (high glucose uptake + lactate production even with O₂). Produces biosynthetic intermediates (PPP, serine) and NADPH for rapidly dividing cells.' },
+  { cat:'Clinical', front:'Metformin — mechanism of action?', back:'Inhibits Complex I → AMP/ATP rises → AMPK activated → inhibits fatty acid synthesis, promotes GLUT4 translocation → lowers blood glucose without causing hypoglycemia.' },
+  { cat:'Clinical', front:'TPI deficiency — what happens?', back:'DHAP accumulates, cannot be converted to G3P. Rare autosomal recessive. Causes hemolytic anemia + severe neuromuscular disease. Fatal in early childhood.' },
+  { cat:'Connections', front:'How does G6P connect glycolysis to glycogen synthesis?', back:'G6P → G1P (phosphoglucomutase) → UDP-glucose (UDP-glucose pyrophosphorylase) → added to glycogen chain by glycogen synthase.' },
+  { cat:'Connections', front:'Which glycolytic intermediate feeds serine synthesis?', back:'3-phosphoglycerate (step 8 intermediate) → 3-phosphohydroxypyruvate → serine. Serine can then yield glycine, cysteine, and one-carbon units.' },
+  { cat:'Connections', front:'What is the approximate total ATP yield from complete glucose oxidation?', back:'~30–32 ATP (using physiological P/O ratios). Glycolysis contributes only 2 net ATP; ~28–30 come from oxidative phosphorylation driven by NADH and FADH₂ from the TCA cycle and PDC.' },
+  { cat:'Overview', front:'What does "substrate-level phosphorylation" mean?', back:'ATP is synthesized by direct transfer of a phosphate group from a substrate (like 1,3-BPG or PEP) to ADP. Does not require a proton gradient. Occurs at steps 7 and 10 of glycolysis.' },
+  { cat:'Enzymes', front:'PFK-1 step — what makes it irreversible?', back:'Large negative ΔG°' (−3.4 kcal/mol) plus allosteric regulation keep it effectively one-directional. Bypassed in gluconeogenesis by fructose-1,6-bisphosphatase.' },
+  { cat:'Regulation', front:'What does AMP signal to PFK-1?', back:'AMP is an energy-deficit signal. High AMP activates PFK-1 (and AMPK), accelerating glycolysis to produce more ATP.' },
+  { cat:'Pyruvate', front:'PDC mnemonic for cofactors?', back:'"Tender Loving Care For Nancy" = TPP (B1), Lipoic acid, CoA (B5), FAD (B2), NAD⁺ (B3).' },
+  { cat:'PPP', front:'What does the oxidative phase of the PPP use as a substrate and produce?', back:'Substrate: G6P. Products: ribulose-5-phosphate + 2 NADPH + CO₂. Rate-limiting enzyme: G6PD.' },
+  { cat:'PPP', front:'Why do cancer cells upregulate G6PD?', back:'For NADPH (fatty acid synthesis, ROS defense) and ribose-5-phosphate (nucleotide synthesis for DNA replication). PPP supports rapid cell division.' }
+];
+
+let currentFilter = 'All';
+const allCats = ['All', ...new Set(flashcards.map(f => f.cat))];
+
+function renderFC() {
+  const filterBar = document.getElementById('fc-filters');
+  allCats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'fc-filter' + (cat === 'All' ? ' active' : '');
+    btn.textContent = cat;
+    btn.onclick = () => {
+      currentFilter = cat;
+      document.querySelectorAll('.fc-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderFCGrid();
+    };
+    filterBar.appendChild(btn);
+  });
+  renderFCGrid();
+}
+
+function renderFCGrid() {
+  const grid = document.getElementById('fc-grid');
+  grid.innerHTML = '';
+  const filtered = currentFilter === 'All' ? flashcards : flashcards.filter(f => f.cat === currentFilter);
+  filtered.forEach((f, i) => {
+    const card = document.createElement('div');
+    card.className = 'fc-card';
+    card.onclick = () => card.classList.toggle('flipped');
+    card.innerHTML = `
+      <div class="fc-inner">
+        <div class="fc-front">
+          <div class="fc-cat">${f.cat}</div>
+          <div class="fc-front-text">${f.front}</div>
+          <div class="fc-hint">Click to reveal answer</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-cat">${f.cat}</div>
+          <div class="fc-back-text">${f.back}</div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ========== SHORT ANSWER DATA ==========
+const saData = [
+  {
+    level: 'Foundation',
+    q: 'Explain in your own words why glycolysis must spend 2 ATP before it can make ATP. Use an analogy if it helps.',
+    concepts: [
+      { kw: ['invest','spent','cost','priming','preparation','phase 1'], score: 2, label:'Investment phase purpose' },
+      { kw: ['phosphorylate','phosphate','trap','charged','membrane'], score: 2, label:'Phosphorylation function' },
+      { kw: ['committed','committed step','cannot leave','locked'], score: 1, label:'Trapping glucose' },
+      { kw: ['4 ATP','made','gross','net 2'], score: 1, label:'Gross vs net yield' }
+    ],
+    model: 'The investment phase (steps 1–3) spends 2 ATP to add phosphate groups to glucose. This serves two purposes: first, it traps glucose inside the cell — phosphorylated molecules carry a negative charge and cannot pass through the lipid membrane. Second, it makes the molecule more reactive and easier for phase 2 enzymes to break down. Think of it like priming a pump or breaking a $10 bill to use a vending machine. Phase 2 then produces 4 ATP gross, giving a net of 2 ATP after subtracting the investment.'
+  },
+  {
+    level: 'Foundation',
+    q: 'What happens to pyruvate after glycolysis when (a) oxygen is available and (b) oxygen is not available? Why does the anaerobic route regenerate NAD⁺?',
+    concepts: [
+      { kw: ['acetyl-CoA','pdc','pyruvate dehydrogenase','mitochondria','krebs','TCA'], score: 2, label:'Aerobic fate' },
+      { kw: ['lactate','lactic acid','fermentation','LDH'], score: 2, label:'Anaerobic fate' },
+      { kw: ['NAD+','regenerate','GAPDH','step 6','glycolysis continue'], score: 3, label:'NAD⁺ regeneration logic' }
+    ],
+    model: 'With oxygen: Pyruvate enters the mitochondria and is converted to acetyl-CoA by the pyruvate dehydrogenase complex (PDC), releasing CO₂ and NADH. Acetyl-CoA then enters the TCA cycle for much more ATP. Without oxygen: Lactate dehydrogenase converts pyruvate to lactate, simultaneously oxidizing NADH back to NAD⁺. The point of this reaction is not the lactate itself — it is the NAD⁺ regeneration. GAPDH (step 6 of glycolysis) requires NAD⁺ as an electron acceptor. If NAD⁺ is not regenerated, GAPDH stops, and glycolysis stalls. Lactate production keeps glycolysis running during anaerobic conditions.'
+  },
+  {
+    level: 'Foundation',
+    q: 'What is the pentose phosphate pathway and why does the body need it? Name two key products.',
+    concepts: [
+      { kw: ['NADPH','reducing power'], score: 2, label:'NADPH production' },
+      { kw: ['ribose','nucleotide','DNA','RNA'], score: 2, label:'Ribose-5-phosphate' },
+      { kw: ['G6P','branches','glucose-6-phosphate'], score: 1, label:'Branch point' },
+      { kw: ['antioxidant','glutathione','protection','defense'], score: 1, label:'Antioxidant role' }
+    ],
+    model: 'The pentose phosphate pathway (PPP) branches from glycolysis at glucose-6-phosphate. Rather than producing ATP, it generates two critical products: NADPH and ribose-5-phosphate. NADPH is used for reductive biosynthesis (fatty acid synthesis, cholesterol synthesis) and antioxidant defense (keeping glutathione reduced). Ribose-5-phosphate is the sugar backbone of DNA, RNA, ATP, CoA, and NAD⁺. The PPP is the cell's manufacturing and defense arm, while glycolysis is the energy-production arm.'
+  },
+  {
+    level: 'Intermediate',
+    q: 'PFK-1 is described as the "throttle" of glycolysis. Explain its regulation by ATP, AMP, and fructose-2,6-bisphosphate, including why each makes metabolic sense.',
+    concepts: [
+      { kw: ['ATP inhibit','high ATP','energy sufficient','feedback'], score: 2, label:'ATP inhibition logic' },
+      { kw: ['AMP activat','energy deficit','low energy','run faster'], score: 2, label:'AMP activation logic' },
+      { kw: ['F-2,6-bisP','fructose-2,6-bisphosphate','PFK-2','insulin'], score: 3, label:'F-2,6-bisP mechanism' },
+      { kw: ['committed','rate-limiting','step 3','irreversible'], score: 1, label:'Why this step is controlled' }
+    ],
+    model: 'PFK-1 sits at step 3, the committed, irreversible step of glycolysis — the ideal control point. ATP inhibits PFK-1 at a separate allosteric site from the active site: when ATP is abundant, the cell does not need more energy, so slowing glycolysis conserves substrate. AMP activates PFK-1 — AMP signals energy deficit (low ATP reserves), so the pathway accelerates to restore ATP. Fructose-2,6-bisphosphate (F-2,6-bisP) is the most potent activator. It is synthesized by PFK-2 (activated by insulin in the fed state). F-2,6-bisP can override ATP inhibition, ensuring glycolysis runs when the cell is fed and insulin levels are high. Glucagon signaling (via PKA) activates the FBPase-2 domain of the bifunctional enzyme, dropping F-2,6-bisP, which inhibits PFK-1 and favors gluconeogenesis during fasting.'
+  },
+  {
+    level: 'Intermediate',
+    q: 'Explain the mechanistic basis of arsenic poisoning's effect on glycolysis. Which enzyme is affected and how does this prevent ATP production at step 7?',
+    concepts: [
+      { kw: ['arsenate','phosphate','analog','compete','GAPDH'], score: 3, label:'Arsenate mechanism' },
+      { kw: ['1,3-BPG','acyl-phosphate','not formed','hydrolyze'], score: 3, label:'1,3-BPG not made' },
+      { kw: ['PGK','phosphoglycerate kinase','step 7','no substrate'], score: 2, label:'Step 7 uncoupled' },
+      { kw: ['uncoupled','ATP not made','energy wasted','heat'], score: 1, label:'Uncoupling consequence' }
+    ],
+    model: 'Arsenate (AsO₄³⁻) is a structural analog of phosphate (PO₄³⁻). At step 6, GAPDH normally couples oxidation of G3P with inorganic phosphate incorporation to produce 1,3-bisphosphoglycerate — a high-energy acyl-phosphate bond. Arsenate substitutes for phosphate in this reaction, producing 1-arseno-3-phosphoglycerate. Unlike 1,3-BPG, this intermediate spontaneously and rapidly hydrolyzes — no phosphoglycerate kinase is needed. The result: the carbon flows through but no high-energy phosphate is captured. Step 7 (phosphoglycerate kinase) has no substrate and cannot transfer phosphate to ADP. Two ATP per glucose are lost (one per G3P), and the energy is dissipated as heat. Glycolysis continues to run but is energetically uncoupled — glucose is consumed without useful ATP output.'
+  },
+  {
+    level: 'Intermediate',
+    q: 'Why can't red blood cells use the TCA cycle or oxidative phosphorylation? What are the consequences when key glycolytic enzymes fail in these cells?',
+    concepts: [
+      { kw: ['no mitochondria','anucleate','mature RBC','lack organelle'], score: 3, label:'RBC no mitochondria' },
+      { kw: ['glycolysis only','sole source','ATP from glycolysis'], score: 2, label:'Glycolysis sole ATP source' },
+      { kw: ['pyruvate kinase','PK deficiency','hemolytic','anemia'], score: 2, label:'PK deficiency consequence' },
+      { kw: ['G6PD','PPP','NADPH','oxidative'], score: 2, label:'G6PD and PPP importance' },
+      { kw: ['TPI','DHAP','accumulate','neuromuscular'], score: 1, label:'TPI deficiency' }
+    ],
+    model: 'Mature red blood cells have no nucleus, mitochondria, or other membrane-bound organelles — this maximizes space for hemoglobin. Without mitochondria, RBCs cannot run the TCA cycle or oxidative phosphorylation. They depend 100% on glycolysis for ATP. This makes them uniquely vulnerable to glycolytic enzyme deficiencies. Pyruvate kinase (PK) deficiency is the most common — less ATP → Na⁺/K⁺-ATPase fails → osmotic imbalance → RBC lysis (hemolytic anemia). Paradoxically, 2,3-BPG accumulates (from step 8 backing up), improving O₂ delivery to tissues as partial compensation. G6PD deficiency impairs the PPP, leaving RBCs without NADPH for glutathione regeneration — oxidative stress causes membrane damage. TPI deficiency is rarer but catastrophic — DHAP accumulates and the neuromuscular system is severely affected.'
+  },
+  {
+    level: 'Intermediate',
+    q: 'Compare and contrast hexokinase and glucokinase. Why does it make physiological sense for the liver to have glucokinase instead of hexokinase?',
+    concepts: [
+      { kw: ['Km','high Km','low Km','affinity','10 mM','0.1 mM'], score: 3, label:'Km difference' },
+      { kw: ['G6P inhibit','product inhibition','hexokinase inhibit'], score: 2, label:'Product inhibition' },
+      { kw: ['glucokinase not inhibited','G6P no effect'], score: 2, label:'Glucokinase not inhibited' },
+      { kw: ['glucose sensor','fed state','high glucose','postprandial'], score: 2, label:'Glucose sensing role' },
+      { kw: ['liver','pancreas','beta cell'], score: 1, label:'Tissue location' }
+    ],
+    model: 'Hexokinase (isoforms I–III) has a very high affinity for glucose (Km ≈ 0.1 mM) — it is active even at low blood glucose. It is inhibited by its product G6P (product inhibition), so when G6P accumulates, hexokinase slows down automatically. Glucokinase (hexokinase IV) in the liver and pancreatic beta cells has a much lower affinity (Km ≈ 10 mM), is not inhibited by G6P, and shows sigmoidal kinetics (cooperative behavior). This makes it a glucose sensor: it only significantly phosphorylates glucose when blood glucose is high, as in the fed/postprandial state. This makes physiological sense — the liver should only aggressively trap glucose when there is excess, and the pancreatic beta cell should only sense and respond to elevated glucose. Hexokinase in other tissues works continuously at low glucose levels to supply those tissues.'
+  },
+  {
+    level: 'Advanced',
+    q: 'A hepatocyte receives both glucagon and high levels of AMP simultaneously. Predict and explain the net effect on glycolysis, gluconeogenesis, and F-2,6-bisP levels. Consider the competing signals.',
+    concepts: [
+      { kw: ['glucagon','PKA','phosphorylate','FBPase-2','F-2,6-bisP decrease'], score: 3, label:'Glucagon → low F-2,6-bisP' },
+      { kw: ['AMP activat','PFK-1','glycolysis','AMP kinase','AMPK'], score: 3, label:'AMP activates glycolysis' },
+      { kw: ['competing','tension','balance','net effect'], score: 2, label:'Signal competition' },
+      { kw: ['gluconeogenesis','glucose production','fasting'], score: 2, label:'Gluconeogenesis context' }
+    ],
+    model: 'Competing signals: Glucagon (via PKA) phosphorylates PFK-2/FBPase-2, activating the FBPase-2 domain → F-2,6-bisP drops → PFK-1 loses its strongest activator → glycolysis tends to slow, favoring gluconeogenesis. High AMP: directly activates PFK-1 at an allosteric site, pushing glycolysis forward. High AMP also activates AMPK, which can further modify fuel metabolism. Net prediction: The competition depends on the magnitude of each signal. In a physiological fasting context where glucagon dominates, the net effect is usually decreased glycolytic flux because the F-2,6-bisP drop is profound. However, if AMP is extremely high (severe energy deprivation, ischemia), AMPK activation may partially override the glucagon effect on PFK-1. The liver's response would be nuanced: partial gluconeogenesis for blood glucose maintenance while maintaining some glycolytic flux to meet the liver's own urgent ATP needs. This illustrates why metabolic regulation involves integration of multiple signals, not simple on/off switches.'
+  },
+  {
+    level: 'Advanced',
+    q: 'Explain the Warburg effect. Why do cancer cells prefer aerobic glycolysis when it is thermodynamically less efficient than oxidative phosphorylation? What does this have to do with the pentose phosphate pathway?',
+    concepts: [
+      { kw: ['Warburg','aerobic glycolysis','oxygen present','lactate'], score: 2, label:'Warburg definition' },
+      { kw: ['biosynthesis','building blocks','precursor','proliferate'], score: 3, label:'Biosynthetic advantage' },
+      { kw: ['PPP','NADPH','ribose','G6PD'], score: 3, label:'PPP connection' },
+      { kw: ['serine','3-phosphoglycerate','one-carbon','amino acid'], score: 2, label:'Serine synthesis' },
+      { kw: ['FDG PET','glucose uptake','imaging','diagnosis'], score: 1, label:'Clinical imaging' },
+      { kw: ['PK-M2','pyruvate kinase M2','isoform'], score: 1, label:'PK-M2 role' }
+    ],
+    model: 'The Warburg effect describes cancer cells' preference for glycolysis + lactate production even in the presence of oxygen. Thermodynamically, oxidative phosphorylation generates ~30–32 ATP per glucose vs. only 2 from glycolysis — so the Warburg effect seems wasteful. The key insight: rapidly dividing cells need carbon frames and reducing power, not just ATP. Aerobic glycolysis provides: (1) G6P → PPP → NADPH for fatty acid synthesis (building new membranes) and for ROS buffering (cancer cells have high oxidative stress); (2) G6P → PPP → ribose-5-phosphate for nucleotide synthesis (DNA replication); (3) 3-phosphoglycerate → serine for protein synthesis and one-carbon metabolism; (4) acetyl-CoA for lipid synthesis. The PK-M2 isoform in cancer cells can be less active, causing buildup of upstream intermediates that are diverted to these biosynthetic branches. The Warburg effect is also the basis for FDG-PET scanning: cancer cells take up radiolabeled glucose avidly. Targeting G6PD (PPP entry) and PFK-1 are active anti-cancer strategies.'
+  },
+  {
+    level: 'Advanced',
+    q: 'PDC is regulated by phosphorylation (PDK/PDP system). Describe how the fed vs. fasted state differentially regulates PDC activity, naming the specific signals that activate and inhibit PDK. What happens clinically when PDC is impaired?',
+    concepts: [
+      { kw: ['PDK activat','acetyl-CoA','NADH','ATP','energy excess'], score: 3, label:'PDK activation signals' },
+      { kw: ['PDK inhibit','pyruvate','CoA','NAD+','ADP'], score: 3, label:'PDK inhibition signals' },
+      { kw: ['insulin','PDP','phosphatase','dephosphorylate','activate PDC'], score: 2, label:'Insulin/PDP activation' },
+      { kw: ['glucagon','PKA','PDK upregulate','fasting'], score: 2, label:'Fasting/glucagon' },
+      { kw: ['lactic acidosis','thiamine','Wernicke','clinical'], score: 2, label:'Clinical impairment' }
+    ],
+    model: 'PDC is active when dephosphorylated and inactive when phosphorylated. PDK (pyruvate dehydrogenase kinase) phosphorylates and inactivates PDC. PDK is activated by: high acetyl-CoA, NADH, and ATP — signals of energy/substrate abundance, meaning "no more acetyl-CoA needed." PDK is inhibited by: pyruvate, CoA, NAD⁺, and ADP — signals of low energy and substrate availability, meaning "we need more acetyl-CoA." In the fed state: insulin activates PDP (PDC phosphatase) via PP2A → PDC dephosphorylated → active → pyruvate → acetyl-CoA → TCA cycle runs. In the fasted state: glucagon → PDK upregulated → PDC phosphorylated → inactive → pyruvate instead routed to oxaloacetate by pyruvate carboxylase → gluconeogenesis. Clinical: PDC deficiency or thiamine (B1) deficiency impairs E1 subunit → pyruvate backs up → converted to lactate → lactic acidosis. Thiamine deficiency (Wernicke-Korsakoff) requires thiamine before glucose — giving glucose first worsens lactic acidosis by flooding an already-impaired system with more pyruvate.'
+  },
+  {
+    level: 'Advanced',
+    q: 'Trace the fate of the two carbons from one acetyl-CoA through two turns of the TCA cycle. Why can't acetyl-CoA serve as a net carbon source for gluconeogenesis in mammals?',
+    concepts: [
+      { kw: ['CO2','released','lost','two carbons out'], score: 3, label:'Carbon released as CO₂' },
+      { kw: ['oxaloacetate','regenerate','OAA','not net gained'], score: 3, label:'OAA not net increased' },
+      { kw: ['gluconeogenesis','glucose','cannot make','net carbon'], score: 2, label:'Gluconeogenesis impossibility' },
+      { kw: ['glyoxylate','plants','bacteria','bypass'], score: 1, label:'Glyoxylate cycle exception' }
+    ],
+    model: 'When acetyl-CoA enters the TCA cycle, its 2 carbons condense with oxaloacetate (4C) to form citrate (6C). Over the course of the cycle, 2 CO₂ are released — but here is the key: these CO₂ releases do not occur at the same carbons that entered as acetyl-CoA (isotopic tracer studies show the first turn does not release the acetyl carbons). However, across two complete turns, the net result is that 2 carbons enter and 2 carbons exit as CO₂, with no net increase in oxaloacetate. Since gluconeogenesis requires oxaloacetate as a carbon source, and acetyl-CoA cannot provide a net increase in OAA, it cannot serve as a gluconeogenic precursor. (Exception: plants and bacteria have the glyoxylate cycle, which bypasses the two CO₂-releasing steps, allowing net conversion of acetyl-CoA to succinate and then oxaloacetate — enabling fat → sugar conversion. Mammals lack this pathway.) This is why fatty acids (which yield acetyl-CoA) cannot net produce glucose, while amino acids and lactate (which yield pyruvate or OAA directly) can.'
+  },
+  {
+    level: 'Advanced',
+    q: 'Describe how the structure and kinetics of TPI make it a "catalytically perfect" enzyme. What disease results from TPI deficiency and why is it so severe despite TPI being a near-equilibrium enzyme?',
+    concepts: [
+      { kw: ['diffusion limit','kcat/Km','perfect','10^8','catalytic efficiency'], score: 3, label:'Catalytic perfection' },
+      { kw: ['DHAP','accumulate','toxic','cannot convert'], score: 2, label:'DHAP accumulation' },
+      { kw: ['hemolytic','anemia','RBC','neurological','neuromuscular'], score: 2, label:'Disease manifestations' },
+      { kw: ['rate-limiting','even near-equilibrium','absence','concentration'], score: 2, label:'Why near-equilibrium still matters' }
+    ],
+    model: 'TPI has a kcat/Km near the diffusion limit (~10⁸ M⁻¹s⁻¹), meaning it is as fast as it can possibly be — the rate is limited only by how fast substrate diffuses to the active site, not by chemistry. This qualifies it as a "catalytically perfect" enzyme. Despite being a near-equilibrium enzyme (ΔG near zero), TPI is essential — without it, DHAP cannot be converted to G3P and accumulates. DHAP is toxic at high concentrations (it can nonenzymatically glycate proteins). TPI deficiency illustrates that even "near-equilibrium" enzymes are rate-limiting when absent — mass flow depends on enzyme presence. Clinically, TPI deficiency causes severe hemolytic anemia (RBCs without mitochondria are entirely glycolysis-dependent) and progressive neuromuscular disease (the nervous system has very high metabolic demand). It is uniformly fatal in early childhood. This rarity reflects evolutionary pressure — TPI deficiency is almost never viable.'
+  },
+  {
+    level: 'Advanced',
+    q: 'NADPH and NADH differ by a single phosphate group, yet they serve fundamentally different metabolic roles. Explain the logic of maintaining separate pools, and describe the enzymes that produce NADPH in the cytosol.',
+    concepts: [
+      { kw: ['separate pool','distinct pool','not interchangeable','different role'], score: 2, label:'Pool separation logic' },
+      { kw: ['NADH catabolic','ETC','oxidative phosphorylation','ATP'], score: 2, label:'NADH function' },
+      { kw: ['NADPH anabolic','synthesis','biosynthesis','antioxidant'], score: 2, label:'NADPH function' },
+      { kw: ['G6PD','PPP','cytosolic NADPH'], score: 2, label:'G6PD source' },
+      { kw: ['malic enzyme','isocitrate dehydrogenase','cytosolic ICDH'], score: 2, label:'Other NADPH sources' },
+      { kw: ['futile cycle','prevent','2-phosphate','enzyme recognition'], score: 1, label:'Futile cycle prevention' }
+    ],
+    model: 'NADH and NADPH differ by a 2'-phosphate on the adenine nucleotide ribose. Cells maintain them as distinct pools with separate redox ratios: a high NAD⁺/NADH ratio (favoring catabolism and ETC electron flow) coexists with a high NADPH/NADP⁺ ratio (favoring reductive biosynthesis). This separation is essential — if NADPH could freely donate electrons to the ETC, biosynthetic reactions would be starved; if NADH were used for biosynthesis, catabolic flux and ATP production would be compromised. Enzymes distinguish them by recognizing the 2'-phosphate group in their active site architecture. Cytosolic NADPH sources: (1) G6PD (PPP oxidative phase, the primary source); (2) malic enzyme (malate → pyruvate + CO₂ + NADPH); (3) cytosolic isocitrate dehydrogenase (isocitrate → α-ketoglutarate + NADPH, minor). Mitochondrial NADPH comes from mitochondrial ICDH and transhydrogenase (NADH → NADPH). The separation of these pools is a fundamental principle of metabolic organization.'
+  },
+  {
+    level: 'Advanced',
+    q: 'The 10 steps of glycolysis include 3 irreversible and 7 near-equilibrium steps. Explain the thermodynamic and physiological significance of this distribution for the relationship between glycolysis and gluconeogenesis.',
+    concepts: [
+      { kw: ['irreversible','large negative','ΔG','committed'], score: 2, label:'Irreversible steps concept' },
+      { kw: ['near-equilibrium','reversible','shared','same enzyme'], score: 2, label:'Shared reversible steps' },
+      { kw: ['gluconeogenesis','bypass','unique enzyme','different'], score: 3, label:'Gluconeogenesis bypass enzymes' },
+      { kw: ['hexokinase','G6Pase','PFK-1','FBPase','pyruvate kinase','PC/PEPCK'], score: 2, label:'Specific bypass pairs' },
+      { kw: ['regulation','not run simultaneously','reciprocal','coordinate'], score: 2, label:'Reciprocal regulation' }
+    ],
+    model: 'The 7 near-equilibrium steps have small ΔG near zero — they are readily reversible and are shared between glycolysis and gluconeogenesis using the same enzymes running in opposite directions. Mass action (substrate/product ratios) determines direction. The 3 irreversible steps (steps 1, 3, 10) have large negative ΔG — they cannot be reversed under physiological conditions. This creates a design problem: how do you run a pathway in reverse if three steps are irreversible? Solution: gluconeogenesis uses distinct bypass enzymes. Hexokinase (step 1) is bypassed by glucose-6-phosphatase (liver/kidney only — explains why only these tissues export glucose). PFK-1 (step 3) is bypassed by fructose-1,6-bisphosphatase (reciprocally regulated with PFK-1 — when one is active, the other is inhibited). Pyruvate kinase (step 10) is bypassed by the two-enzyme pair: pyruvate carboxylase (pyruvate → OAA) and PEPCK (OAA → PEP). This architecture also allows regulatory logic: when PFK-1 is activated (glycolysis on), FBPase-1 is inhibited (gluconeogenesis off), preventing futile cycling. The 3-irreversible/7-reversible distribution thus enables both directional separation of pathways and coordinated reciprocal regulation.'
+  },
+  {
+    level: 'Advanced',
+    q: 'A cell biologist observes that a cancer cell line has dramatically elevated PK-M2 expression. Predict how this affects glycolytic intermediate pools and explain how this supports rapid cell proliferation.',
+    concepts: [
+      { kw: ['PK-M2','less active','inactive form','dimer'], score: 2, label:'PK-M2 activity' },
+      { kw: ['upstream intermediate','accumulate','3-PG','PEP backup'], score: 3, label:'Intermediate accumulation' },
+      { kw: ['serine','one-carbon','PPP','ribose','divert'], score: 3, label:'Biosynthetic diversion' },
+      { kw: ['NADPH','lipid','membrane','antioxidant'], score: 2, label:'NADPH/lipid benefit' },
+      { kw: ['Warburg','aerobic glycolysis','proliferation'], score: 1, label:'Warburg connection' }
+    ],
+    model: 'PK-M2 can exist in a less active dimeric form (vs. the highly active tetrameric form). Elevated PK-M2 with reduced activity slows the final step of glycolysis — conversion of PEP to pyruvate — causing upstream glycolytic intermediates to back up. Key consequences: 3-phosphoglycerate accumulates → feeds serine synthesis (serine supports protein synthesis, glutathione production, and one-carbon metabolism for nucleotides). F6P and G3P increase → feed back into the PPP → more ribose-5-phosphate (for DNA synthesis) and NADPH (for lipid synthesis and ROS defense). G6P may increase → more PPP flux. Overall: cancer cells shift from "extract maximum ATP per glucose" to "extract maximum biosynthetic material per glucose." Less pyruvate enters the TCA cycle; more glycolytic intermediates are diverted to anabolic pathways. This supports the demands of rapid proliferation: new DNA (ribose), new membranes (fatty acids from NADPH), new proteins (serine, one-carbon units), and survival under oxidative stress (NADPH for glutathione). The "inefficient" Warburg effect is therefore biosynthetically rational for a cell that is growing, not just surviving.'
+  },
+  {
+    level: 'Advanced',
+    q: 'Explain why giving glucose to a thiamine-deficient patient before administering thiamine is dangerous. Be mechanistic — trace the biochemical pathway from glucose administration to clinical deterioration.',
+    concepts: [
+      { kw: ['thiamine','TPP','PDC','E1','cofactor'], score: 2, label:'Thiamine-PDC connection' },
+      { kw: ['glycolysis','pyruvate','accumulate','more pyruvate'], score: 3, label:'Pyruvate accumulation' },
+      { kw: ['PDC impaired','cannot convert','acetyl-CoA blocked'], score: 2, label:'PDC impairment' },
+      { kw: ['lactate','lactic acidosis','LDH','anaerobic'], score: 3, label:'Lactic acidosis' },
+      { kw: ['Wernicke','alcoholism','encephalopathy','worsens'], score: 1, label:'Clinical context' },
+      { kw: ['TCA','transketolase','also impaired'], score: 1, label:'TCA/PPP also affected' }
+    ],
+    model: 'Mechanistic trace: (1) Thiamine (B1) is required as TPP (thiamine pyrophosphate) for PDC's E1 subunit — without thiamine, PDC cannot convert pyruvate to acetyl-CoA. (2) In a thiamine-deficient patient, PDC activity is already severely reduced. (3) Administering glucose: glucose enters glycolysis at normal rates → produces large amounts of pyruvate at step 10. (4) Pyruvate cannot proceed through PDC (impaired) → pyruvate accumulates in the cytosol. (5) Cells respond by activating LDH: pyruvate + NADH → lactate + NAD⁺. Lactate floods the blood → severe lactic acidosis. (6) Additionally, thiamine deficiency impairs α-ketoglutarate dehydrogenase in the TCA cycle and transketolase in the PPP — both also require TPP. These impairments further compromise neuronal energy supply and worsen encephalopathy. (7) The protocol: give thiamine first → replenish TPP cofactor → restore PDC capacity → then give glucose safely. In practice: IV thiamine before any glucose-containing IV fluid in any patient with suspected thiamine deficiency or alcoholism.'
+  },
+  {
+    level: 'Advanced',
+    q: 'Compare the mechanisms by which glycolysis generates ATP (substrate-level phosphorylation) with how oxidative phosphorylation generates ATP (chemiosmosis). Why does glycolysis contribute so little to total ATP yield from glucose?',
+    concepts: [
+      { kw: ['substrate-level','direct transfer','1,3-BPG','PEP','ADP'], score: 3, label:'Substrate-level mechanism' },
+      { kw: ['chemiosmosis','proton gradient','ATP synthase','ETC','proton motive force'], score: 3, label:'Chemiosmosis mechanism' },
+      { kw: ['2 net ATP','glycolysis only','4 gross','phase 1'], score: 2, label:'Glycolysis yield' },
+      { kw: ['30 32 ATP','total','oxidative','10 NADH','2 FADH2'], score: 2, label:'Total yield comparison' },
+      { kw: ['NADH FADH2','electron carrier','ETC','Complex I IV'], score: 2, label:'NADH/FADH₂ role' }
+    ],
+    model: 'Substrate-level phosphorylation (glycolysis steps 7 and 10): A high-energy phosphate bond in a substrate (1,3-BPG at step 7; PEP at step 10) is directly transferred to ADP → ATP. This is direct, simple, and oxygen-independent. No membrane, no gradient needed. Yields 2 ATP (gross) per G3P, 4 per glucose, net 2 per glucose after investment. Chemiosmosis (oxidative phosphorylation): NADH and FADH₂ (electron carriers) donate electrons to the electron transport chain (Complexes I–IV in the inner mitochondrial membrane). Electron flow drives proton pumping from matrix to intermembrane space → electrochemical proton gradient (proton motive force). ATP synthase (Complex V) harnesses this gradient as protons flow back → rotates and synthesizes ATP from ADP + Pᵢ. Yields ~2.5 ATP per NADH, ~1.5 per FADH₂ (physiological P/O ratios). Why glycolysis yields so little: Glycolysis generates only 2 net ATP directly. Its real contribution is generating 2 NADH and 2 pyruvate. The pyruvate → PDC → TCA cycle generates 8 additional NADH, 2 FADH₂, and 2 GTP per glucose. These feed the ETC → ~28–30 more ATP. Total: ~30–32 ATP per glucose, with ~90% from oxidative phosphorylation. Glycolysis's power lies not in its direct ATP yield, but in its role as the gateway, supplier of biosynthetic intermediates, and the only anaerobic ATP source.'
+  },
+  {
+    level: 'Advanced',
+    q: 'A researcher treating patients with septic shock notes severe lactic acidosis and high pyruvate despite adequate oxygenation. Enzyme assays show normal PDC activity. What other metabolic explanations could account for this pattern, and how would you investigate?',
+    concepts: [
+      { kw: ['overwhelm','flux','fast glycolysis','high glycolytic rate'], score: 2, label:'High glycolytic flux' },
+      { kw: ['PDC regulation','PDK','phosphorylate','inactivated'], score: 2, label:'PDC regulation state' },
+      { kw: ['mitochondrial dysfunction','ETC','OxPhos','impaired'], score: 2, label:'Mitochondrial issues' },
+      { kw: ['NADH/NAD+','redox','ratio','impaired reoxidation'], score: 2, label:'Redox imbalance' },
+      { kw: ['investigate','enzyme assay','isotope tracer','metabolomics'], score: 1, label:'Investigation approach' }
+    ],
+    model: 'High lactate + high pyruvate despite normal PDC activity and adequate O₂ — several mechanisms: (1) Overwhelming glycolytic flux: in sepsis, cytokines and catecholamines drive extremely high glycolytic rates; pyruvate is produced faster than PDC and the TCA cycle can process it, even if PDC is functional. (2) PDC may be functional in assay but inhibited in vivo: PDK may be highly active (high acetyl-CoA, NADH from septic metabolism), inactivating PDC by phosphorylation. A normal enzyme assay (done under artificial conditions) would miss this — need to measure phosphorylation state of E1. (3) Mitochondrial dysfunction: ETC may be impaired by reactive oxygen species or bacterial toxins in sepsis → NADH cannot be reoxidized → NAD⁺ depleted in mitochondria → PDC slows (needs NAD⁺) → pyruvate backs up → converted to lactate. (4) NADH/NAD⁺ redox imbalance: if mitochondrial redox is disturbed, the PDC rate drops even though the enzyme protein is present. Investigation: measure PDC phosphorylation state (Western blot with phospho-specific antibody); measure mitochondrial oxygen consumption rate (Seahorse assay); use ¹³C-labeled pyruvate to trace acetyl-CoA entry into TCA; measure mitochondrial NAD⁺/NADH ratio; check PDK isoform expression in relevant tissue.'
+  }
+];
+
+function renderSA() {
+  const container = document.getElementById('sa-questions');
+  saData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'sa-item';
+    div.innerHTML = `
+      <div class="sa-q-num">QUESTION ${i+1} / ${saData.length}</div>
+      <div class="sa-level-tag">${item.level}</div>
+      <div class="sa-q-text">${item.q}</div>
+      <textarea class="sa-textarea" id="sa-ta-${i}" placeholder="Write your answer here..."></textarea>
+      <div><button class="sa-submit" onclick="gradeSA(${i})">Check My Answer</button></div>
+      <div class="sa-result" id="sa-result-${i}">
+        <div class="sa-score-row">
+          <span class="sa-pct" id="sa-pct-${i}"></span>
+          <div class="sa-bar-track"><div class="sa-bar-fill" id="sa-fill-${i}" style="width:0%"></div></div>
+        </div>
+        <div class="sa-tags" id="sa-tags-${i}"></div>
+        <button class="sa-model-toggle" onclick="toggleModel(${i})">▾ Show Model Answer</button>
+        <div class="sa-model" id="sa-model-${i}">${item.model}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function gradeSA(i) {
+  const text = document.getElementById('sa-ta-' + i).value.toLowerCase();
+  if (text.trim().length < 20) { alert('Please write a more complete answer before checking.'); return; }
+  const item = saData[i];
+  let totalScore = 0;
+  let maxScore = 0;
+  let tags = '';
+  item.concepts.forEach(c => {
+    maxScore += c.score;
+    const hit = c.kw.some(kw => text.includes(kw));
+    totalScore += hit ? c.score : 0;
+    tags += `<span class="sa-tag ${hit ? 'hit' : 'miss'}">${hit ? '✓' : '✗'} ${c.label}</span>`;
+  });
+  const wordBonus = text.split(/\s+/).length > 80 ? 1 : 0;
+  const pct = Math.min(100, Math.round((totalScore + wordBonus) / (maxScore + 1) * 100));
+  const result = document.getElementById('sa-result-' + i);
+  result.classList.add('show');
+  document.getElementById('sa-pct-' + i).textContent = pct + '% match';
+  document.getElementById('sa-tags-' + i).innerHTML = tags;
+  const fill = document.getElementById('sa-fill-' + i);
+  fill.style.background = pct >= 70 ? 'var(--accent)' : pct >= 45 ? 'var(--gold)' : 'var(--coral)';
+  setTimeout(() => fill.style.width = pct + '%', 100);
+}
+
+function toggleModel(i) {
+  document.getElementById('sa-model-' + i).classList.toggle('show');
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz();
+  renderFC();
+  renderSA();
+});
+</script>
+</body>
+</html>
